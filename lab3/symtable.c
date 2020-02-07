@@ -3,19 +3,15 @@
 #include<malloc.h>
 #include<string.h>
 #include<stdlib.h>
+#include "symtabfuncs.h"
+/*
+ * Modified by: Brianna Moffett
+ * Changes made:
+ *    -properly indented functions, if statements, loops, etc
+ */
 
 int size=0;
 
-void Insert();
-void Display();
-void Delete();
-int Search(char lab[]);
-void Modify();
-struct SymbTab
-{
-    char label[10],symbol[10];
-    int addr;
-    struct SymbTab *next;};
     struct SymbTab *first,*last = NULL;
     void main()
     {
