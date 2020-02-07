@@ -4,15 +4,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include "symtabfuncs.h"
-/*
- * Modified by: Brianna Moffett
- * Changes made:
- *    -properly indented functions, if statements, loops, etc
- */
-
 int size=0;
-
-    struct SymbTab *first,*last = NULL;
+    struct SymbTab *first,*last;
     void main()
     {
         int op,y;
@@ -106,7 +99,7 @@ int size=0;
         for(i=0;i<size;i++)
         {
             if(strcmp(p->label,lab)==0)
-                flag=1; 
+                flag=1;
             p=p->next;
         }
         return flag;
