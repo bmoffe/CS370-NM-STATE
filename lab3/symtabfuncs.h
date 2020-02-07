@@ -5,7 +5,11 @@
 #include<malloc.h>
 #include<string.h>
 #include<stdlib.h>
-
+/*
+ * Modifed by: Brianna Moffett
+ * Changes made:
+ *  -created header file
+ */
 void Insert();
 void Display();
 void Delete();

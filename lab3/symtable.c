@@ -1,3 +1,10 @@
+/*
+ * Modified by: Brianna Moffett
+ * Changes made:
+ *  -made header and included it in file
+ *  -added comments to code
+ *  -removed headers for functions and placed them in header file 
+ */
 #include<stdio.h>
 /* #include<conio.h> */
 #include<malloc.h>
@@ -46,7 +53,7 @@ int size=0;
         }while(op<6);
         
     }  /* and of main */
-    void Insert()
+    void Insert() /*inserts symbol into table*/
     {
         int n;
         char l[10];
@@ -78,8 +85,8 @@ int size=0;
             size++;
         }
         printf("\n\tLabel inserted\n");
-    }
-    void Display()
+    }/*of insert*/
+    void Display() /*displays the table*/
     {
         int i;
         struct SymbTab *p;
@@ -90,8 +97,8 @@ int size=0;
             printf("\t%s\t\t%s\t\t%d\n",p->label,p->symbol,p->addr);
             p=p->next;
         }
-    }
-    int Search(char lab[])
+    }/*of display*/
+    int Search(char lab[]) /*searches table for specified symbol*/
     {
         int i,flag=0;
         struct SymbTab *p;
@@ -103,8 +110,8 @@ int size=0;
             p=p->next;
         }
         return flag;
-    }
-    void Modify()
+    }/*of search*/
+    void Modify() /*modifies a symbol already inside the table*/
     {
         char l[10],nl[10];
         int add,choice,i,s;
@@ -182,8 +189,8 @@ int size=0;
                 }
                 break;
         }
-    }
-    void Delete()
+    } /*of modify*/
+    void Delete() /*removes a symbol from the table*/
     {
         int a;
         char l[10];
@@ -223,6 +230,6 @@ int size=0;
             printf("\n\tAfter Deletion:\n");
             Display();
         }
-    }
+    } /*of delete*/
     
     
