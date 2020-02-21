@@ -13,9 +13,9 @@
 #include "symtabfuncs.h"
     int size = 0;
     struct SymbTab *first,*last;
-    void main(){
-	Insert("foo", 0);
-    }
+//    void main(){
+//	Insert("foo", 0);
+//    }
     void Insert(char * sym, int offset) /*inserts symbol into table*/
     {
         int n;
@@ -74,7 +74,7 @@
         p=first;
     } /*of delete*/
 
-    int fetch(char * sym){
+    int fetchAddr(char * sym){
 	int i, address;
 	struct SymbTab *p;
 	p = first;

@@ -66,7 +66,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "lab2docalc.y"
+#line 1 "lab4docalc.y"
 
 
 /*
@@ -107,20 +107,23 @@
 #include <stdio.h>
 #include <ctype.h>
 int yylex(); /*prototype to get rid of warnings*/
-//#include "lex.yy.c"
+#include "symtabfuncs.h"
 #define maxstack 26
 
+extern int ln;
 int regs[maxstack];
 int base, debugsw;
 int stackpointer = 0;
 
-void yyerror (s){  /* Called by yyparse on error */
-  printf ("%s\n", s);
-}
+void yyerror (s)
+  char * s;
+  {  /* Called by yyparse on error */
+     printf ("%s\n", s);
+  }
 
 
 
-#line 124 "y.tab.c"
+#line 127 "y.tab.c"
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus
@@ -142,7 +145,10 @@ void yyerror (s){  /* Called by yyparse on error */
 # define YYERROR_VERBOSE 0
 #endif
 
-
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -170,7 +176,17 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 61 "lab4docalc.y"
+
+	int val;
+	char * str;
+
+#line 187 "y.tab.c"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -180,7 +196,7 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 
 
 
@@ -473,9 +489,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    71,    71,    74,    75,    78,    78,    97,    98,    99,
-     103,   105,   105,   116,   118,   120,   122,   124,   126,   128,
-     130,   132,   134,   143
+       0,    80,    80,    83,    84,    87,    87,   107,   108,   109,
+     113,   115,   115,   126,   128,   130,   132,   134,   136,   138,
+     140,   142,   144,   153
 };
 #endif
 
@@ -1282,133 +1298,134 @@ yyreduce:
   switch (yyn)
     {
   case 5:
-#line 78 "lab2docalc.y"
+#line 87 "lab4docalc.y"
     {
-    			if (Search(yyvsp[0]))
+    			if (Search((yyvsp[0].str)))
 			{
-				fprintf(stderr, "Error found on line &d: symbol %s is already defined.\n", ln, yyvsp[0]);
+				fprintf(stderr, "Error found on line &d: symbol %s is already defined.\n", ln, (yyvsp[0].str));
 			}
 			else
 			{
 				if(stackpointer >= maxstack)
 				{
-					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, yyvsp[0]);
+					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, (yyvsp[0].str));
 				}
 				else{
-					Insert(yyvsp[0], stackpointer);
+					Insert((yyvsp[0].str), stackpointer);
 					stackpointer++;
+					ln++;
 				}
 			}
 		}
-#line 1304 "y.tab.c"
+#line 1321 "y.tab.c"
     break;
 
   case 9:
-#line 100 "lab2docalc.y"
+#line 110 "lab4docalc.y"
     { yyerrok; }
-#line 1310 "y.tab.c"
+#line 1327 "y.tab.c"
     break;
 
   case 10:
-#line 104 "lab2docalc.y"
-    { fprintf(stderr,"the anwser is %d\n", yyvsp[0]); }
-#line 1316 "y.tab.c"
+#line 114 "lab4docalc.y"
+    { fprintf(stderr,"the anwser is %d\n", (yyvsp[0].val)); }
+#line 1333 "y.tab.c"
     break;
 
   case 11:
-#line 105 "lab2docalc.y"
+#line 115 "lab4docalc.y"
     {
-			if (Search(yyvsp[0])){
-				fprintf(stderr, "Variable %s on line %d is defined.\n", yyvsp[0], ln);
+			if (Search((yyvsp[0].str))){
+				fprintf(stderr, "Variable %s on line %d is defined.\n", (yyvsp[0].str), ln);
 			}
 			else{
-				fprintf(stderr, "Variable %s on line %d is never defined.\n", yyvsp[0], ln);
+				fprintf(stderr, "Variable %s on line %d is never defined.\n", (yyvsp[0].str), ln);
 			}
 	}
-#line 1329 "y.tab.c"
+#line 1346 "y.tab.c"
     break;
 
   case 12:
-#line 113 "lab2docalc.y"
-    { regs[fetch(yyvsp[-3])] = yyvsp[0]; }
-#line 1335 "y.tab.c"
+#line 123 "lab4docalc.y"
+    { regs[fetchAddr((yyvsp[-3].str))] = (yyvsp[0].val); }
+#line 1352 "y.tab.c"
     break;
 
   case 13:
-#line 117 "lab2docalc.y"
-    { yyval = yyvsp[-1]; }
-#line 1341 "y.tab.c"
+#line 127 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-1].val); }
+#line 1358 "y.tab.c"
     break;
 
   case 14:
-#line 119 "lab2docalc.y"
-    { yyval = yyvsp[-2] - yyvsp[0]; }
-#line 1347 "y.tab.c"
+#line 129 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val); }
+#line 1364 "y.tab.c"
     break;
 
   case 15:
-#line 121 "lab2docalc.y"
-    { yyval = yyvsp[-2] + yyvsp[0]; }
-#line 1353 "y.tab.c"
+#line 131 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val); }
+#line 1370 "y.tab.c"
     break;
 
   case 16:
-#line 123 "lab2docalc.y"
-    { yyval = yyvsp[-2] / yyvsp[0]; }
-#line 1359 "y.tab.c"
+#line 133 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val); }
+#line 1376 "y.tab.c"
     break;
 
   case 17:
-#line 125 "lab2docalc.y"
-    { yyval = yyvsp[-2] % yyvsp[0]; }
-#line 1365 "y.tab.c"
+#line 135 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) % (yyvsp[0].val); }
+#line 1382 "y.tab.c"
     break;
 
   case 18:
-#line 127 "lab2docalc.y"
-    { yyval = yyvsp[-2] & yyvsp[0]; }
-#line 1371 "y.tab.c"
+#line 137 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) & (yyvsp[0].val); }
+#line 1388 "y.tab.c"
     break;
 
   case 19:
-#line 129 "lab2docalc.y"
-    { yyval = yyvsp[-2] | yyvsp[0]; }
-#line 1377 "y.tab.c"
+#line 139 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) | (yyvsp[0].val); }
+#line 1394 "y.tab.c"
     break;
 
   case 20:
-#line 131 "lab2docalc.y"
-    { yyval = yyvsp[-2] * yyvsp[0]; }
-#line 1383 "y.tab.c"
+#line 141 "lab4docalc.y"
+    { (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val); }
+#line 1400 "y.tab.c"
     break;
 
   case 21:
-#line 133 "lab2docalc.y"
-    { yyval = -yyvsp[0]; }
-#line 1389 "y.tab.c"
+#line 143 "lab4docalc.y"
+    { (yyval.val) = -(yyvsp[0].val); }
+#line 1406 "y.tab.c"
     break;
 
   case 22:
-#line 135 "lab2docalc.y"
-    { if (Search(yyvsp[0])){
-				yyval = regs[fetch(yyvsp[0])];
+#line 145 "lab4docalc.y"
+    { if (Search((yyvsp[0].str))){
+				(yyval.val) = regs[fetchAddr((yyvsp[0].str))];
 			  }
 			  else{
-				fprintf(stderr, "Variable %s not found. Will default to 0.\n", yyvsp[0]);
-				yyval = 0;
+				fprintf(stderr, "Variable %s not found. Will default to 0.\n", (yyvsp[0].str));
+				(yyval.val) = 0;
 			  }
 			}
-#line 1402 "y.tab.c"
+#line 1419 "y.tab.c"
     break;
 
   case 23:
-#line 143 "lab2docalc.y"
-    {yyval=yyvsp[0]; fprintf(stderr,"found an integer\n");}
-#line 1408 "y.tab.c"
+#line 153 "lab4docalc.y"
+    {(yyval.val)=(yyvsp[0].val); fprintf(stderr,"found an integer\n");}
+#line 1425 "y.tab.c"
     break;
 
 
-#line 1412 "y.tab.c"
+#line 1429 "y.tab.c"
 
       default: break;
     }
@@ -1640,7 +1657,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 148 "lab2docalc.y"
+#line 158 "lab4docalc.y"
 	/* end of rules, start of program */
 
 int main()

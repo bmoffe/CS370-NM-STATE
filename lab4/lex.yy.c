@@ -472,7 +472,7 @@ int yy_flex_debug = 0;
 
 char yytext[YYLMAX];
 char *yytext_ptr;
-#line 1 "lab2docalc.l"
+#line 1 "lab4docalc.l"
 /*                 Small LEX routine which returns two formal tokens (INTEGER and VARIABLE)
                    along with single string elements like '+'.
  
@@ -486,14 +486,13 @@ char *yytext_ptr;
 		    Changes made:
 		    	-added parenthesis to acceptable list of tokens
 */
-#line 15 "lab2docalc.l"
+#line 15 "lab4docalc.l"
 
 int mydebug=1;
 int ln = 0;
 #include "y.tab.h"
-#include "symtable.c"
+#line 494 "lex.yy.c"
 #line 495 "lex.yy.c"
-#line 496 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -710,9 +709,9 @@ YY_DECL
 		}
 
 	{
-#line 26 "lab2docalc.l"
+#line 25 "lab4docalc.l"
 
-#line 715 "lex.yy.c"
+#line 714 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -781,43 +780,44 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 27 "lab2docalc.l"
+#line 26 "lab4docalc.l"
 {if(mydebug) fprintf(stderr, "int found\n");
 			return(INT);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 29 "lab2docalc.l"
+#line 28 "lab4docalc.l"
 {if(mydebug) fprintf(stderr, "id found\n");
-			yylval.string = strdup(yytext);return(VARIABLE);}
+			yylval.str = strdup(yytext);return(VARIABLE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 31 "lab2docalc.l"
+#line 30 "lab4docalc.l"
 {if (mydebug) fprintf(stderr,"Digit found\n"); 
-                       yylval=atoi((const char *)yytext); return(INTEGER);}
+                       yylval.val=atoi((const char *)yytext); return(INTEGER);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 33 "lab2docalc.l"
+#line 32 "lab4docalc.l"
 {if (mydebug) fprintf(stderr,"Whitespace found\n");}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 34 "lab2docalc.l"
+#line 33 "lab4docalc.l"
 { if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
                        return (*yytext);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 36 "lab2docalc.l"
-{ if (mydebug) fprintf(stderr,"cariage return %c\n",*yytext); 
+#line 35 "lab4docalc.l"
+{ if (mydebug) fprintf(stderr,"cariage return %c\n"
+,*yytext); 
                        return (*yytext);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "lab2docalc.l"
+#line 39 "lab4docalc.l"
 ECHO;
 	YY_BREAK
 #line 823 "lex.yy.c"
@@ -1837,7 +1837,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 39 "lab2docalc.l"
+#line 39 "lab4docalc.l"
 
 
 int yywrap(void)

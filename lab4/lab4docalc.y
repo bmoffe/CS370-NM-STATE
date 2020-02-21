@@ -38,16 +38,19 @@
 #include <stdio.h>
 #include <ctype.h>
 int yylex(); /*prototype to get rid of warnings*/
-//#include "lex.yy.c"
+#include "symtabfuncs.h"
 #define maxstack 26
 
+extern int ln;
 int regs[maxstack];
 int base, debugsw;
 int stackpointer = 0;
 
-void yyerror (s){  /* Called by yyparse on error */
-  printf ("%s\n", s);
-}
+void yyerror (s)
+  char * s;
+  {  /* Called by yyparse on error */
+     printf ("%s\n", s);
+  }
 
 
 %}
@@ -55,10 +58,16 @@ void yyerror (s){  /* Called by yyparse on error */
 
 %start program
 
-%token INTEGER
-%token  VARIABLE
+%union{
+	int val;
+	char * str;
+}
+
+%token<val> INTEGER
+%token <str> VARIABLE
 %token INT
-%type expr stat
+%type <val> expr
+/*%type expr stat*/
 
 %left '|'
 %left '&'
@@ -89,6 +98,7 @@ DEC	:	INT VARIABLE{
 				else{
 					Insert($2, stackpointer);
 					stackpointer++;
+					ln++;
 				}
 			}
 		}//end variable
@@ -110,7 +120,7 @@ stat	:	expr
 				fprintf(stderr, "Variable %s on line %d is never defined.\n", $1, ln);
 			}
 	}'=' expr
-			{ regs[fetch($1)] = $4; }
+			{ regs[fetchAddr($1)] = $4; }
 	;
 
 expr	:	'(' expr ')'
@@ -133,7 +143,7 @@ expr	:	'(' expr ')'
 			{ $$ = -$2; }
 	|	VARIABLE
 			{ if (Search($1)){
-				$$ = regs[fetch($1)];
+				$$ = regs[fetchAddr($1)];
 			  }
 			  else{
 				fprintf(stderr, "Variable %s not found. Will default to 0.\n", $1);

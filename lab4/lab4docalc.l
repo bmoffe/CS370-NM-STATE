@@ -16,7 +16,6 @@
 int mydebug=1;
 int ln = 0;
 #include "y.tab.h"
-#include "symtable.c"
 %}
 
 letter	[a-zA-Z]
@@ -27,13 +26,14 @@ id	{letter}({letter}|{digit})*
 int		{if(mydebug) fprintf(stderr, "int found\n");
 			return(INT);}
 {id}		{if(mydebug) fprintf(stderr, "id found\n");
-			yylval.string = strdup(yytext);return(VARIABLE);}
+			yylval.str = strdup(yytext);return(VARIABLE);}
 [0-9][0-9]*	{if (mydebug) fprintf(stderr,"Digit found\n"); 
-                       yylval=atoi((const char *)yytext); return(INTEGER);}
+                       yylval.val=atoi((const char *)yytext); return(INTEGER);}
 [ \t]		{if (mydebug) fprintf(stderr,"Whitespace found\n");}
 [=()\-+*/%&|;] 	{ if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
                        return (*yytext);}
-\n 		{ if (mydebug) fprintf(stderr,"cariage return %c\n",*yytext); 
+\n 		{ if (mydebug) fprintf(stderr,"cariage return %c\n"
+,*yytext); 
                        return (*yytext);}
 
 %%

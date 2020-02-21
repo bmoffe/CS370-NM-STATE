@@ -15,6 +15,7 @@ void Display();
 void Delete();
 int Search(char sym[]);
 void Modify();
+int fetchAddr(char * sym);
 struct SymbTab
 {
     char * symbol;
