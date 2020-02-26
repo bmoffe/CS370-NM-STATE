@@ -27,6 +27,7 @@
             struct SymbTab *p;
             p=malloc(sizeof(struct SymbTab));
             p->symbol = strdup(sym);
+	        p->addr = offset;
             p->next=NULL;
             if(size==0)
             {

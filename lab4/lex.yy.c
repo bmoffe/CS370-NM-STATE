@@ -485,14 +485,17 @@ char *yytext_ptr;
 		    Modified by: Brianna Moffett
 		    Changes made:
 		    	-added parenthesis to acceptable list of tokens
+		    Changes made (02.26.20):
+			-added rules to return VARIABLE and INTEGER tokens
+			-added semicolon to list of acceptable tokens
 */
-#line 15 "lab4docalc.l"
+#line 18 "lab4docalc.l"
 
 int mydebug=1;
-int ln = 0;
+int ln = 1;
 #include "y.tab.h"
-#line 494 "lex.yy.c"
-#line 495 "lex.yy.c"
+#line 497 "lex.yy.c"
+#line 498 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -709,9 +712,9 @@ YY_DECL
 		}
 
 	{
-#line 25 "lab4docalc.l"
+#line 28 "lab4docalc.l"
 
-#line 714 "lex.yy.c"
+#line 717 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -780,47 +783,47 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 26 "lab4docalc.l"
-{if(mydebug) fprintf(stderr, "int found\n");
+#line 29 "lab4docalc.l"
+{if(mydebug) fprintf(stderr, "int found\n");/*if we find "int", return INT token*/
 			return(INT);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 28 "lab4docalc.l"
-{if(mydebug) fprintf(stderr, "id found\n");
+#line 31 "lab4docalc.l"
+{if(mydebug) fprintf(stderr, "id found\n"); /*if ID is found, return VARIABLE token with the value of whatever this variable is named (i.e. 'x'*/
 			yylval.str = strdup(yytext);return(VARIABLE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 30 "lab4docalc.l"
-{if (mydebug) fprintf(stderr,"Digit found\n"); 
+#line 33 "lab4docalc.l"
+{if (mydebug) fprintf(stderr,"Digit found\n"); /*if digit is found, return INTEGER token*/
                        yylval.val=atoi((const char *)yytext); return(INTEGER);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 32 "lab4docalc.l"
+#line 35 "lab4docalc.l"
 {if (mydebug) fprintf(stderr,"Whitespace found\n");}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 "lab4docalc.l"
+#line 36 "lab4docalc.l"
 { if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
                        return (*yytext);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 35 "lab4docalc.l"
+#line 38 "lab4docalc.l"
 { if (mydebug) fprintf(stderr,"cariage return %c\n"
 ,*yytext); 
                        return (*yytext);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "lab4docalc.l"
+#line 42 "lab4docalc.l"
 ECHO;
 	YY_BREAK
-#line 823 "lex.yy.c"
+#line 826 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1837,7 +1840,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 39 "lab4docalc.l"
+#line 42 "lab4docalc.l"
 
 
 int yywrap(void)

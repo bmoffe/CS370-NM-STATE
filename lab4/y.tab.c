@@ -98,8 +98,13 @@
 	-fixed parenthesis by including both open and close parenthesis characters in lex file rule
 	-fixed multiplication by adding a new rule to y file: when the program finds a '*' token, it
          performs the multiplication arithmetic
-   problems  fix unary minus, fix parenthesis, add multiplication
-   problems  make it so that verbose is on and off with an input argument instead of compiled in
+	Changes made: (02.24.20)
+	 -added symbol table implementation to calculator
+	 -added rulesets for variables/IDs
+	 -removed "#include lex.yy.c" from include statements
+	 -included symbol table code in YACC file
+   problems  fix unary inus, fix parenthesis, add multiplication
+   problems  make it s that verbose is on and off with an input argument instead of compiled in
 */
 
 
@@ -107,13 +112,13 @@
 #include <stdio.h>
 #include <ctype.h>
 int yylex(); /*prototype to get rid of warnings*/
-#include "symtabfuncs.h"
-#define maxstack 26
+#include "symtabfuncs.h" /*header file for symbol table functions*/
+#define maxstack 26 /**/
 
 extern int ln;
 int regs[maxstack];
 int base, debugsw;
-int stackpointer = 0;
+int offset = 0;
 
 void yyerror (s)
   char * s;
@@ -123,7 +128,7 @@ void yyerror (s)
 
 
 
-#line 127 "y.tab.c"
+#line 132 "y.tab.c"
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus
@@ -178,12 +183,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 61 "lab4docalc.y"
+#line 66 "lab4docalc.y"
 
 	int val;
 	char * str;
 
-#line 187 "y.tab.c"
+#line 192 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -489,9 +494,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    80,    80,    83,    84,    87,    87,   107,   108,   109,
-     113,   115,   115,   126,   128,   130,   132,   134,   136,   138,
-     140,   142,   144,   153
+       0,    85,    85,    88,    89,    92,    92,   112,   113,   114,
+     118,   120,   120,   131,   133,   135,   137,   139,   141,   143,
+     145,   147,   149,   158
 };
 #endif
 
@@ -1298,115 +1303,115 @@ yyreduce:
   switch (yyn)
     {
   case 5:
-#line 87 "lab4docalc.y"
-    {
+#line 92 "lab4docalc.y"
+    { /*variable ruleset; what to do when the variable is already defined, or when there is no more space in the regs*/
     			if (Search((yyvsp[0].str)))
 			{
-				fprintf(stderr, "Error found on line &d: symbol %s is already defined.\n", ln, (yyvsp[0].str));
-			}
-			else
+				fprintf(stderr, "Error found on line %d: symbol %s is already defined.\n", ln, (yyvsp[0].str)); /*if the variable is already defined, BARF*/
+			}/*of if*/
+			else /*we now know that the variable is not defined*/
 			{
-				if(stackpointer >= maxstack)
+				if(offset >= maxstack) /*how much space do we have left in the regs?*/
 				{
-					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, (yyvsp[0].str));
-				}
-				else{
-					Insert((yyvsp[0].str), stackpointer);
-					stackpointer++;
-					ln++;
-				}
-			}
+					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, (yyvsp[0].str)); /*if we do not have any more space in the regs, BARF*/
+				}/*of if*/
+				else{/*we have space and the variable is not in the symbol table, so insert it*/
+					Insert((yyvsp[0].str), offset);
+					offset++; /*increment the offset by 1*/
+					ln++; /*increment line number variable*/
+				}/*of else*/
+			}/*of else*/
 		}
-#line 1321 "y.tab.c"
+#line 1326 "y.tab.c"
     break;
 
   case 9:
-#line 110 "lab4docalc.y"
+#line 115 "lab4docalc.y"
     { yyerrok; }
-#line 1327 "y.tab.c"
+#line 1332 "y.tab.c"
     break;
 
   case 10:
-#line 114 "lab4docalc.y"
+#line 119 "lab4docalc.y"
     { fprintf(stderr,"the anwser is %d\n", (yyvsp[0].val)); }
-#line 1333 "y.tab.c"
+#line 1338 "y.tab.c"
     break;
 
   case 11:
-#line 115 "lab4docalc.y"
+#line 120 "lab4docalc.y"
     {
-			if (Search((yyvsp[0].str))){
-				fprintf(stderr, "Variable %s on line %d is defined.\n", (yyvsp[0].str), ln);
-			}
+			if (Search((yyvsp[0].str))){/*does the variable already exist?*/
+				fprintf(stderr, "Variable %s on line %d is defined.\n", (yyvsp[0].str), ln);/*if yes, display that it is defined.*/
+			}/*of if*/
 			else{
-				fprintf(stderr, "Variable %s on line %d is never defined.\n", (yyvsp[0].str), ln);
-			}
+				fprintf(stderr, "Variable %s on line %d is never defined.\n", (yyvsp[0].str), ln);/*if not, and the user tries to use an undefined variable, BARF*/
+			}/*of else*/
 	}
-#line 1346 "y.tab.c"
+#line 1351 "y.tab.c"
     break;
 
   case 12:
-#line 123 "lab4docalc.y"
+#line 128 "lab4docalc.y"
     { regs[fetchAddr((yyvsp[-3].str))] = (yyvsp[0].val); }
-#line 1352 "y.tab.c"
+#line 1357 "y.tab.c"
     break;
 
   case 13:
-#line 127 "lab4docalc.y"
+#line 132 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-1].val); }
-#line 1358 "y.tab.c"
+#line 1363 "y.tab.c"
     break;
 
   case 14:
-#line 129 "lab4docalc.y"
+#line 134 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val); }
-#line 1364 "y.tab.c"
+#line 1369 "y.tab.c"
     break;
 
   case 15:
-#line 131 "lab4docalc.y"
+#line 136 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val); }
-#line 1370 "y.tab.c"
+#line 1375 "y.tab.c"
     break;
 
   case 16:
-#line 133 "lab4docalc.y"
+#line 138 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val); }
-#line 1376 "y.tab.c"
+#line 1381 "y.tab.c"
     break;
 
   case 17:
-#line 135 "lab4docalc.y"
+#line 140 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) % (yyvsp[0].val); }
-#line 1382 "y.tab.c"
+#line 1387 "y.tab.c"
     break;
 
   case 18:
-#line 137 "lab4docalc.y"
+#line 142 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) & (yyvsp[0].val); }
-#line 1388 "y.tab.c"
+#line 1393 "y.tab.c"
     break;
 
   case 19:
-#line 139 "lab4docalc.y"
+#line 144 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) | (yyvsp[0].val); }
-#line 1394 "y.tab.c"
+#line 1399 "y.tab.c"
     break;
 
   case 20:
-#line 141 "lab4docalc.y"
+#line 146 "lab4docalc.y"
     { (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val); }
-#line 1400 "y.tab.c"
+#line 1405 "y.tab.c"
     break;
 
   case 21:
-#line 143 "lab4docalc.y"
+#line 148 "lab4docalc.y"
     { (yyval.val) = -(yyvsp[0].val); }
-#line 1406 "y.tab.c"
+#line 1411 "y.tab.c"
     break;
 
   case 22:
-#line 145 "lab4docalc.y"
+#line 150 "lab4docalc.y"
     { if (Search((yyvsp[0].str))){
 				(yyval.val) = regs[fetchAddr((yyvsp[0].str))];
 			  }
@@ -1415,17 +1420,17 @@ yyreduce:
 				(yyval.val) = 0;
 			  }
 			}
-#line 1419 "y.tab.c"
+#line 1424 "y.tab.c"
     break;
 
   case 23:
-#line 153 "lab4docalc.y"
+#line 158 "lab4docalc.y"
     {(yyval.val)=(yyvsp[0].val); fprintf(stderr,"found an integer\n");}
-#line 1425 "y.tab.c"
+#line 1430 "y.tab.c"
     break;
 
 
-#line 1429 "y.tab.c"
+#line 1434 "y.tab.c"
 
       default: break;
     }
@@ -1657,7 +1662,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 158 "lab4docalc.y"
+#line 163 "lab4docalc.y"
 	/* end of rules, start of program */
 
 int main()

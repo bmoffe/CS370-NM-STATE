@@ -29,8 +29,13 @@
 	-fixed parenthesis by including both open and close parenthesis characters in lex file rule
 	-fixed multiplication by adding a new rule to y file: when the program finds a '*' token, it
          performs the multiplication arithmetic
-   problems  fix unary minus, fix parenthesis, add multiplication
-   problems  make it so that verbose is on and off with an input argument instead of compiled in
+	Changes made: (02.24.20)
+	 -added symbol table implementation to calculator
+	 -added rulesets for variables/IDs
+	 -removed "#include lex.yy.c" from include statements
+	 -included symbol table code in YACC file
+   problems  fix unary inus, fix parenthesis, add multiplication
+   problems  make it s that verbose is on and off with an input argument instead of compiled in
 */
 
 
@@ -38,13 +43,13 @@
 #include <stdio.h>
 #include <ctype.h>
 int yylex(); /*prototype to get rid of warnings*/
-#include "symtabfuncs.h"
-#define maxstack 26
+#include "symtabfuncs.h" /*header file for symbol table functions*/
+#define maxstack 26 /**/
 
 extern int ln;
 int regs[maxstack];
 int base, debugsw;
-int stackpointer = 0;
+int offset = 0;
 
 void yyerror (s)
   char * s;
@@ -84,24 +89,24 @@ DECLS	:	/*empty*/
         |	DEC DECLS
         ;
 
-DEC	:	INT VARIABLE{
+DEC	:	INT VARIABLE{ /*variable ruleset; what to do when the variable is already defined, or when there is no more space in the regs*/
     			if (Search($2))
 			{
-				fprintf(stderr, "Error found on line &d: symbol %s is already defined.\n", ln, $2);
-			}
-			else
+				fprintf(stderr, "Error found on line %d: symbol %s is already defined.\n", ln, $2); /*if the variable is already defined, BARF*/
+			}/*of if*/
+			else /*we now know that the variable is not defined*/
 			{
-				if(stackpointer >= maxstack)
+				if(offset >= maxstack) /*how much space do we have left in the regs?*/
 				{
-					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, $2);
-				}
-				else{
-					Insert($2, stackpointer);
-					stackpointer++;
-					ln++;
-				}
-			}
-		}//end variable
+					fprintf(stderr, "Error found on line %d: no more space left in the registers.\n", ln, $2); /*if we do not have any more space in the regs, BARF*/
+				}/*of if*/
+				else{/*we have space and the variable is not in the symbol table, so insert it*/
+					Insert($2, offset);
+					offset++; /*increment the offset by 1*/
+					ln++; /*increment line number variable*/
+				}/*of else*/
+			}/*of else*/
+		}/*end variable*/
 	';' '\n'
 
 list	:	/* empty */
@@ -111,16 +116,16 @@ list	:	/* empty */
 	;
 
 stat	:	expr
-			{ fprintf(stderr,"the anwser is %d\n", $1); }
+			{ fprintf(stderr,"the anwser is %d\n", $1); }/*displays the results of the calculation (these rules are defined below)*/
 	|	VARIABLE{
-			if (Search($1)){
-				fprintf(stderr, "Variable %s on line %d is defined.\n", $1, ln);
-			}
+			if (Search($1)){/*does the variable already exist?*/
+				fprintf(stderr, "Variable %s on line %d is defined.\n", $1, ln);/*if yes, display that it is defined.*/
+			}/*of if*/
 			else{
-				fprintf(stderr, "Variable %s on line %d is never defined.\n", $1, ln);
-			}
+				fprintf(stderr, "Variable %s on line %d is never defined.\n", $1, ln);/*if not, and the user tries to use an undefined variable, BARF*/
+			}/*of else*/
 	}'=' expr
-			{ regs[fetchAddr($1)] = $4; }
+			{ regs[fetchAddr($1)] = $4; } /*get the address of the variable to be assigned a value, and assign the value to the requested variable*/
 	;
 
 expr	:	'(' expr ')'
