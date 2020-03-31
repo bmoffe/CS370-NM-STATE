@@ -951,24 +951,24 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 54 "lab6.l"
-{if(mydebug) fprintf(stderr, "id found\n"); /*if ID is found, return VARIABLE token with the value of whatever this variable is named (i.e. 'x'*/
+{/*if(mydebug) fprintf(stderr, "id found\n");*/ /*if ID is found, return VARIABLE token with the value of whatever this variable is named (i.e. 'x'*/
 			yylval.str = strdup(yytext);return(ID);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 56 "lab6.l"
-{if (mydebug) fprintf(stderr,"Digit found\n");
+{/*if (mydebug) fprintf(stderr,"Digit found\n");*/
                        yylval.val=atoi((const char *)yytext); return(NUM);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 58 "lab6.l"
-{if(mydebug) fprintf(stderr, "whitespace found\n");}
+/*{if(mydebug) fprintf(stderr, "whitespace found\n");}*/
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 59 "lab6.l"
-{if(mydebug) fprintf(stderr, "return a token %c\n", *yytext);
+{/*if(mydebug) fprintf(stderr, "return a token %c\n", *yytext);*/
 					return(*yytext);}
 	YY_BREAK
 case 29:

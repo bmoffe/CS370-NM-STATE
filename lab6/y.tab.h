@@ -70,11 +70,11 @@ extern int yydebug;
     ID = 276,
     TRUE = 277,
     FALSE = 278,
-    NOT = 279,
-    AND = 280,
-    OR = 281,
-    MYBEGIN = 282,
-    END = 283
+    AND = 279,
+    OR = 280,
+    MYBEGIN = 281,
+    END = 282,
+    NOT = 283
   };
 #endif
 /* Tokens.  */
@@ -99,11 +99,11 @@ extern int yydebug;
 #define ID 276
 #define TRUE 277
 #define FALSE 278
-#define NOT 279
-#define AND 280
-#define OR 281
-#define MYBEGIN 282
-#define END 283
+#define AND 279
+#define OR 280
+#define MYBEGIN 281
+#define END 282
+#define NOT 283
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

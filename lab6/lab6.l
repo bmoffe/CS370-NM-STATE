@@ -51,12 +51,12 @@ and		{return(AND);} /*and token*/
 not		{return(NOT);} /*not token*/
 begin 		{return(MYBEGIN);} /*begin token*/
 end		{return(END);} /*end token*/
-[a-zA-Z][a-zA-Z0-9]*		{if(mydebug) fprintf(stderr, "id found\n"); /*if ID is found, return VARIABLE token with the value of whatever this variable is named (i.e. 'x'*/
+[a-zA-Z][a-zA-Z0-9]*		{/*if(mydebug) fprintf(stderr, "id found\n");*/ /*if ID is found, return VARIABLE token with the value of whatever this variable is named (i.e. 'x'*/
 			yylval.str = strdup(yytext);return(ID);}
-[0-9][0-9]* 	{if (mydebug) fprintf(stderr,"Digit found\n");
+[0-9][0-9]* 	{/*if (mydebug) fprintf(stderr,"Digit found\n");*/
                        yylval.val=atoi((const char *)yytext); return(NUM);}
-[ \t]		{if(mydebug) fprintf(stderr, "whitespace found\n");}
-[<>=()\-+*/%&\[\];,]		{if(mydebug) fprintf(stderr, "return a token %c\n", *yytext);
+[ \t]		/*{if(mydebug) fprintf(stderr, "whitespace found\n");}*/
+[<>=()\-+*/%&\[\];,]		{/*if(mydebug) fprintf(stderr, "return a token %c\n", *yytext);*/
 					return(*yytext);}
 \n		{ln++;}
 

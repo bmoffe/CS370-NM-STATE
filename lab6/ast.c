@@ -3,66 +3,68 @@
 #include <malloc.h>
 #include <ctype.h>
 static int mydebug;
+
+
+void printspace(int num){
+	int i;
+	for (i = 0; i < num; i++){
+		printf("  ");
+	}
+}
+
+
+void printtype(enum OPERATORS op){
+
+     if(op == INTTYPE){
+          printf("int ");
+     }
+     if (op == VOIDTYPE){
+          printf("void ");
+     }
+     if (op == BOOLTYPE){
+          printf("boolean ");
+     }
+
+}
+
+
 void ASTprint(ASTnode *p, int level){
 	int i;
+	//printf("I am here.\n");
 	if (p == NULL){return;}
-	else{
-		for (i = 0; i < level; i++){
+	printspace(level);
 			switch (p->type){
-				case VARDEC: printf("var");
-					     if(p -> operator == INTTYPE){
-						     printf("int");
-					     }
-					     if (p -> operator == VOIDTYPE){
-						     printf("void");
-					     }
-					     if (p -> operator == BOOLTYPE){
-						     printf("boolean");
-					     }
+				case VARDEC: printf("var ");
+					     printtype(p -> operator);
 					     printf(" %s", p->name);
 					     if (p -> value > 0){
 						     printf("[%d]", p -> value);
 					     }
 					     printf("\n");
+					     ASTprint(p -> s1, level);
 					     break;
-				case FUNDEC: printf("function declaration");
-					     if (p -> operator == INTDEC){
-						     printf("int");
-					     }
-					     if (p -> operator == VOIDDEC){
-						     printf("void");
-					     }
-					     if (p -> operator == BOOLDEC){
-						     printf("boolean");
-					     }
+				case FUNDEC: printf("function ");
+					     printtype(p -> operator);
 					     printf("FUNCTION %s \n", p -> name);
 					     if (p -> s1 == NULL){
 						     printf("(void)");
 					     }
 					     else{
 						     printf("(\n");
-						     ASTprint(p -> s1, level + 2);
+						     ASTprint(p -> s1, level + 1);
 						     printf(")");
 					     }
 					     printf("\n");
-					     ASTprint(p -> s1, level + 2);
+					     ASTprint(p -> s2, level + 1);
 					     break;
-				case PARAM: printf("params");
-			       		     if (p -> operator == INTTYPE){
-				 		     printf("int");
-					     }
-		       			     if (p -> operator == VOIDTYPE){
-			 			     printf("void");
-					     }
-					     if (p -> operator == BOOLTYPE){
-						     printf("boolean");
-					     }
+				case PARAM: printf("params ");
+					    printtype(p -> operator);
 					     printf("%s \n", p -> name);
 					     ASTprint(p -> s1, level + 1);
 					     break;
 			        case BLOCK: printf("block \n");
 					    ASTprint(p -> s1, level + 1);
-					    ASTprint(p -> s2, level + 2);
+					    ASTprint(p -> s2, level + 1);
 					    break;
 				case ASSIGNSTMT: printf("assign \n");
 					         ASTprint(p -> s1, level + 1);
@@ -70,18 +72,16 @@ void ASTprint(ASTnode *p, int level){
 					         break;
 			        case IFSTMT: printf("if \n");
 					     ASTprint(p -> s1, level + 1);
-					     ASTprint(p -> s2, level + 2);
-					     if (p -> s2 != NULL){
-						    for (i = 0; i < level; i++){
-							    printf(" ");
+					     ASTprint(p -> s2 -> s1, level + 1);
+					     if (p -> s2 -> s2 != NULL){
+						            printspace(level);
 							    printf("else \n");
-							    ASTprint(p -> s2, level + 2);
-						    }
+							    ASTprint(p -> s2 -> s2, level + 1);
 					     }
 					     break;
 				case WHILESTMT: printf("while \n");
 				                ASTprint(p -> s1, level + 1);
-				                ASTprint(p -> s2, level + 2);
+				                ASTprint(p -> s2, level + 1);
 					        break;
 				case ARGSLIST: printf("arg list \n");
 					       ASTprint(p -> s1, level + 1);
@@ -92,19 +92,19 @@ void ASTprint(ASTnode *p, int level){
 				case READSTMT: printf("read \n");
 					       ASTprint(p -> s1, level + 1);
 					       break;
-				case RETURNSTMT:/* printf("return");*/
+				case RETURNSTMT:printf("return ");
 					         if (p -> s1 == NULL){
-							 printf("return \n");
+							 printf("empty \n");
 						 }
 						 else{
-							 printf("return with expr \n");
+							 printf("with expr \n");
 							 ASTprint(p -> s1, level + 1);
 						 }
 						 break;
 				case CALL: printf("call: %s \n", p -> name);
 					   ASTprint(p -> s1, level + 1);
 					   break;
-				case EXPRSTMT: printf("expr \n");
+				case EXPRSTMT: printf("expr statement \n");
 					       ASTprint(p -> s1, level + 1);
 					       break;
 				case EXPR:
@@ -138,12 +138,22 @@ void ASTprint(ASTnode *p, int level){
 					   if (p -> operator == NOTEQUAL){
 						   printf("!= \n");
 					   }
+					   if (p -> operator == MYNOT){
+						   printf("NOT \n");
+					   }
+					   if (p -> operator == MYAND){
+						   printf("AND \n");
+					   }
+					   if (p -> operator == MYOR){
+						   printf("OR \n");
+					   }
 					   ASTprint(p -> s1, level + 1);
 					   ASTprint(p -> s2, level + 1);
 					   break;
-				case NUMBER: printf("num with val %d \n", p -> value);
-					  ASTprint(p -> s1, level + 1);
-					  break;
+				case NUMBER: /*printspace(level);*/
+					     printf("num with val %d \n", p -> value);
+					     ASTprint(p -> s1, level + 1);
+					     break;
 				case IDENTIFIER:
 					  if (p -> s1 == NULL){
 						  printf("id %s \n", p -> name);
@@ -151,22 +161,21 @@ void ASTprint(ASTnode *p, int level){
 					  }
 					  else {
 						  printf("id %s \n", p -> name);
-						  for (i = 0; i < level; i++){
-							  printf(" ");
-						  }
-						  printf("aray ref [ \n");
+						  printspace(level);
+						  printf("array ref [ \n");
 						  ASTprint(p -> s1, level + 1);
-						  for (i = 0; i < level; i++){
-							  printf("] \n");/*array end*/
-						  }
+						  printspace(level);
+						  printf("] \n");/*array end*/
 					  }
 					  break;
 				default: printf("unknown type");
-			}
-		}
-	}
+			}//END OF SWTICH
+			ASTprint(p -> next, level);
 }
-ASTnode *ASTcreatnode(enum ASTtype newtype){
+
+
+
+ASTnode *ASTcreatenode(enum ASTtype newtype){
 	ASTnode *p	;
 	if (mydebug) fprintf(stderr, "creating node \n");
 	p = (ASTnode *) malloc(sizeof(ASTnode));
@@ -176,7 +185,4 @@ ASTnode *ASTcreatnode(enum ASTtype newtype){
 	p -> s2 = NULL;
 	p -> value = 0;
 	return(p);
-}
-void ASThitchleft(ASTnode *a, ASTnode *b){
-
 }

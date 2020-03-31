@@ -51,7 +51,7 @@ extern int mydebug;
 extern int ln;
 extern int level;
 extern ASTnode *program;
-enum OPERATORS type;
+enum OPERATORS mytype;
 void yyerror (s)
   char * s;
   {  /* Called by yyparse on error */
@@ -73,7 +73,7 @@ void yyerror (s)
 
 %token <val> NUM INT VOID BOOLEAN IF ELSE THEN WHILE DO READ WRITE MYRETURN LE GE LT GT EQ NE
 %token <str> ID
-%token TRUE FALSE NOT AND OR MYBEGIN END
+%token TRUE FALSE AND OR MYBEGIN END NOT
 %type <node> program declist dec vardec varlist fundec params paramlist param compoundstmt localdec statementlist statement expressionstmt selectionstmt iterationstmt assignmentstmt simpleexpression additiveexpression returnstmt readstmt writestmt expression variable args arglist call factor term
 %type <operator> relop addop multop typespec
 
@@ -83,7 +83,6 @@ program : declist {program = $1;} /*program → declaration-list*/
         
 declist : dec {$$ = $1;}/*declaration-list → declaration { declaration }*/
         | dec declist {$$ = $1;
-		       $$ = $1;
 		       $1 -> next = $2;}
         ;
         
@@ -92,9 +91,11 @@ dec     : vardec {$$ = $1;}/*declaration → var-declaration | fun-declaration*/
         ;
         
 vardec   : typespec varlist ';' /*vardec*/ {$$ = $2;
-	 				    $$ -> s1 = $2;
-					    $$ -> operator = $1;}
-         ;
+					    ASTnode * p = $$;
+				            while(p != NULL){
+					      p -> operator = $1;
+					      p = p -> s1;}}
+	 ;
          
 varlist  : ID /*vardec*/ {$$ = ASTcreatenode(VARDEC);
                           $$ -> name = $1;}
@@ -103,13 +104,21 @@ varlist  : ID /*vardec*/ {$$ = ASTcreatenode(VARDEC);
 			  	    {$$ = ASTcreatenode(VARDEC);
 			  	     $$ -> name = $1;
 			  	     $$ -> value = $3;}
-         | ID ',' varlist {$$ -> s1 = $3;}
-         | ID '[' NUM ']' ',' varlist {$$ -> s1 = $6;} /*{fprintf(stderr, "Const found %d\n", $3);}*/
+         | ID ',' varlist {$$ = ASTcreatenode(VARDEC);
+			   $$ -> name = $1;
+			   $$ -> s1 = $3;}
+         | ID '[' NUM ']' ',' varlist {$$ = ASTcreatenode(VARDEC);
+				       $$ -> name = $1;
+				       $$ -> value = $3;
+				       $$ -> s1 = $6;} /*{fprintf(stderr, "Const found %d\n", $3);}*/
          ;
          
-typespec : INT {$$ = INTTYPE;} /*type specifier*/
-         | VOID {$$ = VOIDTYPE;}
-         | BOOLEAN {$$ = BOOLTYPE;}
+typespec : INT {$$ = INTTYPE;
+	    }
+         | VOID {$$ = VOIDTYPE;
+		   }
+         | BOOLEAN {$$ = BOOLTYPE;
+		      }
          ;
          
 fundec   : typespec ID '(' params ')' compoundstmt {$$ = ASTcreatenode(FUNDEC);
@@ -124,8 +133,8 @@ params   : VOID {$$ = NULL;} /*parameters*/
          ;
 
 paramlist : param {$$ = $1;} /*parameters list*/
-          | param ',' paramlist {$1 -> next = $3;
-				 $$ = $1;}
+          | param ',' paramlist {$$ = $1;
+				 $$ -> next = $3;}
           ;
           
 param     : typespec ID {$$ = ASTcreatenode(PARAM);
@@ -138,27 +147,19 @@ param     : typespec ID {$$ = ASTcreatenode(PARAM);
           ;
           
 compoundstmt : MYBEGIN localdec statementlist END {$$ = ASTcreatenode(BLOCK);
-	     					   if ($2 == NULL){
-							$$ -> s1 = $3;
-						   }
-						   else{
 							$$ -> s1 = $2;
 							$$ -> s2 = $3;
-						   }}
+						   }
              ;
              
 localdec     : /*localdec*/ /*empty*/ {$$ = NULL;}
-             | vardec localdec {$1 -> next = $2;}
+             | vardec localdec {$1 -> next = $2; $$ = $1;}
              ;
              
 statementlist : /*statement list*/ /*empty*/ {$$ = NULL;}
-              | statement statementlist {if ($1 == NULL){
-						$$ = $2;
-					 }
-					 else{
+              | statement statementlist {
 						$1 -> next = $2;
 						$$ = $1;
-					 }
 					}
               ;
               
@@ -174,16 +175,14 @@ statement     : expressionstmt {$$ = $1;}
 
 expressionstmt : expression ';' {$$ = ASTcreatenode(EXPRSTMT);
 	       			 $$ -> s1 = $1;}
-               | ';' {$$ = NULL;
-		      $$ = ASTcreatenode(EXPRSTMT);
+               | ';' { $$ = ASTcreatenode(EXPRSTMT);
 		      $$ -> s1 = NULL;}
                ;
                
 selectionstmt  : IF expression THEN statement {$$ = ASTcreatenode(IFSTMT);
 	   				       $$ -> s1 = $2;
 					       $$ -> s2 = ASTcreatenode(IFELSE);
-					       $$ -> s2 -> s1 = $2;
-					       $$ -> s2 -> s2 = NULL;}
+					       $$ -> s2 -> s1 = $4;}
                | IF expression THEN statement ELSE statement {$$ = ASTcreatenode(IFSTMT);
 							      $$ -> s1 = $2;
 							      $$ -> s2 = ASTcreatenode(IFELSE);
@@ -233,12 +232,12 @@ simpleexpression : additiveexpression {$$ = $1;}
 							      $$ -> s2 = $3;}
                  ;
                  
-relop            : LE {$$ = $1;}
-                 | LT {$$ = $1;}
-                 | GT {$$ = $1;}
-                 | GE {$$ = $1;}
-                 | EQ {$$ = $1;}
-                 | NE {$$ = $1;}
+relop            : LE {$$ = LESSTHANEQ;}
+                 | LT {$$ = LESSTHAN;}
+                 | GT {$$ = GREATERTHAN;}
+                 | GE {$$ = GREATERTHANEQ;}
+                 | EQ {$$ = EQUAL;}
+                 | NE {$$ = NOTEQUAL;}
                  ;
                  
 additiveexpression : term {$$ = $1;}
@@ -261,8 +260,8 @@ term               : factor {$$ = $1;}
                    
 multop             : '*' {$$ = MULTI;}
                    | '/' {$$ = DIV;}
-                   | AND {$$ = AND;}
-                   | OR  {$$ = OR;}
+                   | AND {$$ = MYAND;}
+                   | OR  {$$ = MYOR;}
                    ;
                 
 factor             : '(' expression ')' {$$ = $2;}
@@ -270,9 +269,13 @@ factor             : '(' expression ')' {$$ = $2;}
 			  $$ -> value = $1;}
                    | variable {$$ = $1;}
                    | call {$$ = $1;}
-                   | TRUE {$$ -> value = 1;}
-                   | FALSE {$$ -> value = 0;}
-                   | NOT factor
+                   | TRUE {$$ = ASTcreatenode(NUMBER);
+		           $$ -> value = 1;}
+                   | FALSE {$$ = ASTcreatenode(NUMBER);
+		            $$ -> value = 0;}
+                   | NOT factor {$$ = ASTcreatenode(EXPR);
+				 $$ -> operator = MYNOT;
+				 $$ -> s1 = $2;}
                    ;
                    
 call               : ID '(' args ')' {$$ = ASTcreatenode(CALL);
@@ -293,6 +296,9 @@ arglist            : expression {$$ = ASTcreatenode(ARGSLIST);
                    ;
 %%	/* end of rules, start of program */
 
-int main()
-{ yyparse();
+int main(int argv, char *arg[])
+{ 
+  yyparse();
+  fprintf(stderr, "The input has been checked.");
+  ASTprint(program, 0);
 }

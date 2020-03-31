@@ -120,7 +120,7 @@ extern int mydebug;
 extern int ln;
 extern int level;
 extern ASTnode *program;
-enum OPERATORS type;
+enum OPERATORS mytype;
 void yyerror (s)
   char * s;
   {  /* Called by yyparse on error */
@@ -189,11 +189,11 @@ extern int yydebug;
     ID = 276,
     TRUE = 277,
     FALSE = 278,
-    NOT = 279,
-    AND = 280,
-    OR = 281,
-    MYBEGIN = 282,
-    END = 283
+    AND = 279,
+    OR = 280,
+    MYBEGIN = 281,
+    END = 282,
+    NOT = 283
   };
 #endif
 /* Tokens.  */
@@ -218,11 +218,11 @@ extern int yydebug;
 #define ID 276
 #define TRUE 277
 #define FALSE 278
-#define NOT 279
-#define AND 280
-#define OR 281
-#define MYBEGIN 282
-#define END 283
+#define AND 279
+#define OR 280
+#define MYBEGIN 281
+#define END 282
+#define NOT 283
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -485,7 +485,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   123
+#define YYLAST   124
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  40
@@ -543,14 +543,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    81,    81,    84,    85,    90,    91,    94,    99,   102,
-     106,   107,   110,   111,   112,   115,   122,   123,   126,   127,
-     131,   134,   140,   150,   151,   154,   155,   165,   166,   167,
-     168,   169,   170,   171,   172,   175,   177,   182,   187,   194,
-     199,   201,   205,   209,   213,   218,   221,   224,   229,   230,
-     236,   237,   238,   239,   240,   241,   244,   245,   251,   252,
-     255,   256,   262,   263,   264,   265,   268,   269,   271,   272,
-     273,   274,   275,   278,   283,   284,   287,   290
+       0,    81,    81,    84,    85,    89,    90,    93,   100,   103,
+     107,   110,   116,   118,   120,   124,   131,   132,   135,   136,
+     140,   143,   149,   155,   156,   159,   160,   166,   167,   168,
+     169,   170,   171,   172,   173,   176,   178,   182,   186,   193,
+     198,   200,   204,   208,   212,   217,   220,   223,   228,   229,
+     235,   236,   237,   238,   239,   240,   243,   244,   250,   251,
+     254,   255,   261,   262,   263,   264,   267,   268,   270,   271,
+     272,   274,   276,   281,   286,   287,   290,   293
 };
 #endif
 
@@ -561,8 +561,8 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "NUM", "INT", "VOID", "BOOLEAN", "IF",
   "ELSE", "THEN", "WHILE", "DO", "READ", "WRITE", "MYRETURN", "LE", "GE",
-  "LT", "GT", "EQ", "NE", "ID", "TRUE", "FALSE", "NOT", "AND", "OR",
-  "MYBEGIN", "END", "';'", "'['", "']'", "','", "'('", "')'", "'='", "'+'",
+  "LT", "GT", "EQ", "NE", "ID", "TRUE", "FALSE", "AND", "OR", "MYBEGIN",
+  "END", "NOT", "';'", "'['", "']'", "','", "'('", "')'", "'='", "'+'",
   "'-'", "'*'", "'/'", "$accept", "program", "declist", "dec", "vardec",
   "varlist", "typespec", "fundec", "params", "paramlist", "param",
   "compoundstmt", "localdec", "statementlist", "statement",
@@ -585,10 +585,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -89
+#define YYPACT_NINF -49
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-89)))
+  (!!((Yystate) == (-49)))
 
 #define YYTABLE_NINF -17
 
@@ -599,19 +599,19 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      74,   -89,   -89,   -89,    10,   -89,    74,   -89,     4,   -89,
-     -89,   -89,    27,     7,    47,    30,    88,   -89,    35,    52,
-     -89,    24,    40,    61,   -89,    37,    49,    66,    70,    74,
-      30,    95,    74,   -89,   -89,   -89,    68,    74,    30,     6,
-     -89,   -89,   -89,    23,    23,    79,    23,    19,    -9,   -89,
-     -89,    23,   -89,    23,   -89,    73,     6,   -89,   -89,   -89,
-     -89,   -89,   -89,   -89,    75,    67,    71,    -5,    29,   -89,
-     -89,    94,   -89,    96,    76,    80,    81,   -89,    82,    23,
-      23,   -89,    78,   -89,   -89,   -89,    23,   -89,   -89,   -89,
-     -89,   -89,   -89,    23,   -89,   -89,    23,   -89,   -89,   -89,
-     -89,    23,     6,     6,   -89,   -89,   -89,    77,    83,    84,
-     -89,   -89,    56,    -5,    29,   -89,    97,   -89,   -89,    23,
-     -89,   -89,     6,   -89,   -89
+      56,   -49,   -49,   -49,     8,   -49,    56,   -49,    -7,   -49,
+     -49,   -49,    48,     4,    33,    25,    86,   -49,    18,    63,
+     -49,    17,    61,    20,   -49,    39,    62,    66,    71,    56,
+      25,    95,    56,   -49,   -49,   -49,    68,    56,    25,     6,
+     -49,   -49,   -49,    22,    22,    79,    22,    19,    -9,   -49,
+     -49,    22,   -49,    22,   -49,    74,     6,   -49,   -49,   -49,
+     -49,   -49,   -49,   -49,    73,    70,    69,    38,    34,   -49,
+     -49,    94,   -49,    93,    76,    78,    80,   -49,    81,    22,
+      22,   -49,    77,   -49,   -49,   -49,    22,   -49,   -49,   -49,
+     -49,   -49,   -49,    22,   -49,   -49,    22,   -49,   -49,   -49,
+     -49,    22,     6,     6,   -49,   -49,   -49,    82,    83,    84,
+     -49,   -49,    50,    38,    34,   -49,   100,   -49,   -49,    22,
+     -49,   -49,     6,   -49,   -49
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -637,10 +637,10 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -89,   -89,   107,   -89,   -25,    -7,    33,   -89,   -89,    85,
-     -89,    89,    86,    60,   -88,   -89,   -89,   -89,   -89,   -89,
-     -89,   -89,   -42,   -39,    34,   -89,    26,   -89,    25,   -89,
-     -48,   -89,   -89,     3
+     -49,   -49,   106,   -49,   -25,     0,    -6,   -49,   -49,    85,
+     -49,    88,    87,    64,   -46,   -49,   -49,   -49,   -49,   -49,
+     -49,   -49,   -42,   -39,    31,   -49,    26,   -49,    27,   -49,
+     -48,   -49,   -49,     2
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -657,36 +657,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      65,    71,    73,    81,    76,    78,    75,    37,    20,    42,
-      10,    82,    37,    43,   116,   117,    44,    65,    45,    46,
-      47,    79,    42,    35,    80,    12,    42,    48,    49,    50,
-      51,    94,    95,    32,   124,    52,    17,   107,   108,    53,
-      48,    49,    50,    51,    48,    49,    50,    51,    77,    22,
-      18,    19,    53,   115,    97,    98,    53,    14,   -16,    15,
-      16,    27,    22,    65,    65,    38,    26,    99,   100,    29,
-      38,    87,    88,    89,    90,    91,    92,   108,     1,     2,
-       3,    30,    14,    65,    15,   121,    87,    88,    89,    90,
-      91,    92,     1,    21,     3,    28,    31,    32,    36,    40,
-      74,    83,    86,   102,    85,   122,    79,   103,   118,   104,
-     105,   106,   111,    11,    34,   119,    84,    33,   120,   113,
-     112,   114,   123,    41
+      65,    71,    73,    81,    76,    78,    75,    37,    10,    42,
+      22,    82,    37,    43,    12,    20,    44,    65,    45,    46,
+      47,    79,    42,    22,    80,    42,    38,    48,    49,    50,
+      35,    38,    32,    17,    51,    52,    18,   107,   108,    53,
+      48,    49,    50,    48,    49,    50,    19,    51,    77,    26,
+      51,   -16,    53,   115,    28,    53,   116,   117,    97,    98,
+       1,     2,     3,    65,    65,    87,    88,    89,    90,    91,
+      92,    29,    99,   100,    94,    95,   124,   108,    14,   121,
+      15,    16,    27,    65,    87,    88,    89,    90,    91,    92,
+       1,    21,     3,    14,    30,    15,    31,    32,    36,    40,
+      74,    83,    85,   102,   103,    86,    79,   104,   122,   105,
+     106,   111,    11,   118,    34,   119,    33,   112,   120,   113,
+      84,   123,     0,   114,    41
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-      39,    43,    44,    51,    46,    47,    45,    32,    15,     3,
-       0,    53,    37,     7,   102,   103,    10,    56,    12,    13,
-      14,    30,     3,    30,    33,    21,     3,    21,    22,    23,
-      24,    36,    37,    27,   122,    29,    29,    79,    80,    33,
-      21,    22,    23,    24,    21,    22,    23,    24,    29,    16,
-       3,    21,    33,   101,    25,    26,    33,    30,    34,    32,
-      33,    21,    29,   102,   103,    32,    31,    38,    39,    32,
-      37,    15,    16,    17,    18,    19,    20,   119,     4,     5,
-       6,    32,    30,   122,    32,    29,    15,    16,    17,    18,
-      19,    20,     4,     5,     6,    34,    30,    27,     3,    31,
-      21,    28,    35,     9,    29,     8,    30,    11,    31,    29,
-      29,    29,    34,     6,    29,    32,    56,    28,    34,    93,
-      86,    96,   119,    37
+      39,    43,    44,    51,    46,    47,    45,    32,     0,     3,
+      16,    53,    37,     7,    21,    15,    10,    56,    12,    13,
+      14,    30,     3,    29,    33,     3,    32,    21,    22,    23,
+      30,    37,    26,    29,    28,    29,     3,    79,    80,    33,
+      21,    22,    23,    21,    22,    23,    21,    28,    29,    31,
+      28,    34,    33,   101,    34,    33,   102,   103,    24,    25,
+       4,     5,     6,   102,   103,    15,    16,    17,    18,    19,
+      20,    32,    38,    39,    36,    37,   122,   119,    30,    29,
+      32,    33,    21,   122,    15,    16,    17,    18,    19,    20,
+       4,     5,     6,    30,    32,    32,    30,    26,     3,    31,
+      21,    27,    29,     9,    11,    35,    30,    29,     8,    29,
+      29,    34,     6,    31,    29,    32,    28,    86,    34,    93,
+      56,   119,    -1,    96,    37
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -696,13 +696,13 @@ static const yytype_uint8 yystos[] =
        0,     4,     5,     6,    41,    42,    43,    44,    46,    47,
        0,    42,    21,    45,    30,    32,    33,    29,     3,    21,
       45,     5,    46,    48,    49,    50,    31,    21,    34,    32,
-      32,    30,    27,    51,    49,    45,     3,    44,    46,    52,
+      32,    30,    26,    51,    49,    45,     3,    44,    46,    52,
       31,    52,     3,     7,    10,    12,    13,    14,    21,    22,
-      23,    24,    29,    33,    51,    53,    54,    55,    56,    57,
+      23,    28,    29,    33,    51,    53,    54,    55,    56,    57,
       58,    59,    60,    61,    62,    63,    64,    66,    68,    70,
       71,    62,    63,    62,    21,    63,    62,    29,    62,    30,
-      33,    70,    62,    28,    53,    29,    35,    15,    16,    17,
-      18,    19,    20,    65,    36,    37,    67,    25,    26,    38,
+      33,    70,    62,    27,    53,    29,    35,    15,    16,    17,
+      18,    19,    20,    65,    36,    37,    67,    24,    25,    38,
       39,    69,     9,    11,    29,    29,    29,    62,    62,    72,
       73,    34,    64,    66,    68,    70,    54,    54,    31,    32,
       34,    29,     8,    73,    54
@@ -1432,231 +1432,231 @@ yyreduce:
   case 4:
 #line 85 "lab6.y"
     {(yyval.node) = (yyvsp[-1].node);
-		       (yyval.node) = (yyvsp[-1].node);
 		       (yyvsp[-1].node) -> next = (yyvsp[0].node);}
-#line 1438 "y.tab.c"
+#line 1437 "y.tab.c"
     break;
 
   case 5:
-#line 90 "lab6.y"
+#line 89 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1444 "y.tab.c"
+#line 1443 "y.tab.c"
     break;
 
   case 6:
-#line 91 "lab6.y"
+#line 90 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1450 "y.tab.c"
+#line 1449 "y.tab.c"
     break;
 
   case 7:
-#line 94 "lab6.y"
+#line 93 "lab6.y"
     {(yyval.node) = (yyvsp[-1].node);
-	 				    (yyval.node) -> s1 = (yyvsp[-1].node);
-					    (yyval.node) -> operator = (yyvsp[-2].operator);}
-#line 1458 "y.tab.c"
+					    ASTnode * p = (yyval.node);
+				            while(p != NULL){
+					      p -> operator = (yyvsp[-2].operator);
+					      p = p -> s1;}}
+#line 1459 "y.tab.c"
     break;
 
   case 8:
-#line 99 "lab6.y"
+#line 100 "lab6.y"
     {(yyval.node) = ASTcreatenode(VARDEC);
                           (yyval.node) -> name = (yyvsp[0].str);}
-#line 1465 "y.tab.c"
+#line 1466 "y.tab.c"
     break;
 
   case 9:
-#line 103 "lab6.y"
+#line 104 "lab6.y"
     {(yyval.node) = ASTcreatenode(VARDEC);
 			  	     (yyval.node) -> name = (yyvsp[-3].str);
 			  	     (yyval.node) -> value = (yyvsp[-1].val);}
-#line 1473 "y.tab.c"
+#line 1474 "y.tab.c"
     break;
 
   case 10:
-#line 106 "lab6.y"
-    {(yyval.node) -> s1 = (yyvsp[0].node);}
-#line 1479 "y.tab.c"
+#line 107 "lab6.y"
+    {(yyval.node) = ASTcreatenode(VARDEC);
+			   (yyval.node) -> name = (yyvsp[-2].str);
+			   (yyval.node) -> s1 = (yyvsp[0].node);}
+#line 1482 "y.tab.c"
     break;
 
   case 11:
-#line 107 "lab6.y"
-    {(yyval.node) -> s1 = (yyvsp[0].node);}
-#line 1485 "y.tab.c"
-    break;
-
-  case 12:
 #line 110 "lab6.y"
-    {(yyval.operator) = INTTYPE;}
+    {(yyval.node) = ASTcreatenode(VARDEC);
+				       (yyval.node) -> name = (yyvsp[-5].str);
+				       (yyval.node) -> value = (yyvsp[-3].val);
+				       (yyval.node) -> s1 = (yyvsp[0].node);}
 #line 1491 "y.tab.c"
     break;
 
+  case 12:
+#line 116 "lab6.y"
+    {(yyval.operator) = INTTYPE;
+	    }
+#line 1498 "y.tab.c"
+    break;
+
   case 13:
-#line 111 "lab6.y"
-    {(yyval.operator) = VOIDTYPE;}
-#line 1497 "y.tab.c"
+#line 118 "lab6.y"
+    {(yyval.operator) = VOIDTYPE;
+		   }
+#line 1505 "y.tab.c"
     break;
 
   case 14:
-#line 112 "lab6.y"
-    {(yyval.operator) = BOOLTYPE;}
-#line 1503 "y.tab.c"
+#line 120 "lab6.y"
+    {(yyval.operator) = BOOLTYPE;
+		      }
+#line 1512 "y.tab.c"
     break;
 
   case 15:
-#line 115 "lab6.y"
+#line 124 "lab6.y"
     {(yyval.node) = ASTcreatenode(FUNDEC);
 						    (yyval.node) -> operator = (yyvsp[-5].operator);
 						    (yyval.node) -> name = (yyvsp[-4].str);
 						    (yyval.node) -> s1 = (yyvsp[-2].node);
 						    (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1513 "y.tab.c"
+#line 1522 "y.tab.c"
     break;
 
   case 16:
-#line 122 "lab6.y"
+#line 131 "lab6.y"
     {(yyval.node) = NULL;}
-#line 1519 "y.tab.c"
+#line 1528 "y.tab.c"
     break;
 
   case 17:
-#line 123 "lab6.y"
+#line 132 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1525 "y.tab.c"
+#line 1534 "y.tab.c"
     break;
 
   case 18:
-#line 126 "lab6.y"
+#line 135 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1531 "y.tab.c"
+#line 1540 "y.tab.c"
     break;
 
   case 19:
-#line 127 "lab6.y"
-    {(yyvsp[-2].node) -> next = (yyvsp[0].node);
-				 (yyval.node) = (yyvsp[-2].node);}
-#line 1538 "y.tab.c"
+#line 136 "lab6.y"
+    {(yyval.node) = (yyvsp[-2].node);
+				 (yyval.node) -> next = (yyvsp[0].node);}
+#line 1547 "y.tab.c"
     break;
 
   case 20:
-#line 131 "lab6.y"
+#line 140 "lab6.y"
     {(yyval.node) = ASTcreatenode(PARAM);
 	  		 (yyval.node) -> operator = (yyvsp[-1].operator);
 			 (yyval.node) -> name = (yyvsp[0].str);}
-#line 1546 "y.tab.c"
+#line 1555 "y.tab.c"
     break;
 
   case 21:
-#line 134 "lab6.y"
+#line 143 "lab6.y"
     {(yyval.node) = ASTcreatenode(PARAM);
 				     (yyval.node) -> operator = (yyvsp[-4].operator);
 				     (yyval.node) -> name = (yyvsp[-3].str);
 				     (yyval.node) -> value = (yyvsp[-1].val);}
-#line 1555 "y.tab.c"
+#line 1564 "y.tab.c"
     break;
 
   case 22:
-#line 140 "lab6.y"
+#line 149 "lab6.y"
     {(yyval.node) = ASTcreatenode(BLOCK);
-	     					   if ((yyvsp[-2].node) == NULL){
-							(yyval.node) -> s1 = (yyvsp[-1].node);
-						   }
-						   else{
 							(yyval.node) -> s1 = (yyvsp[-2].node);
 							(yyval.node) -> s2 = (yyvsp[-1].node);
-						   }}
-#line 1568 "y.tab.c"
+						   }
+#line 1573 "y.tab.c"
     break;
 
   case 23:
-#line 150 "lab6.y"
+#line 155 "lab6.y"
     {(yyval.node) = NULL;}
-#line 1574 "y.tab.c"
+#line 1579 "y.tab.c"
     break;
 
   case 24:
-#line 151 "lab6.y"
-    {(yyvsp[-1].node) -> next = (yyvsp[0].node);}
-#line 1580 "y.tab.c"
+#line 156 "lab6.y"
+    {(yyvsp[-1].node) -> next = (yyvsp[0].node); (yyval.node) = (yyvsp[-1].node);}
+#line 1585 "y.tab.c"
     break;
 
   case 25:
-#line 154 "lab6.y"
+#line 159 "lab6.y"
     {(yyval.node) = NULL;}
-#line 1586 "y.tab.c"
+#line 1591 "y.tab.c"
     break;
 
   case 26:
-#line 155 "lab6.y"
-    {if ((yyvsp[-1].node) == NULL){
-						(yyval.node) = (yyvsp[0].node);
-					 }
-					 else{
+#line 160 "lab6.y"
+    {
 						(yyvsp[-1].node) -> next = (yyvsp[0].node);
 						(yyval.node) = (yyvsp[-1].node);
-					 }
 					}
-#line 1599 "y.tab.c"
+#line 1600 "y.tab.c"
     break;
 
   case 27:
-#line 165 "lab6.y"
+#line 166 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1605 "y.tab.c"
+#line 1606 "y.tab.c"
     break;
 
   case 28:
-#line 166 "lab6.y"
+#line 167 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1611 "y.tab.c"
+#line 1612 "y.tab.c"
     break;
 
   case 29:
-#line 167 "lab6.y"
+#line 168 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1617 "y.tab.c"
+#line 1618 "y.tab.c"
     break;
 
   case 30:
-#line 168 "lab6.y"
+#line 169 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1623 "y.tab.c"
+#line 1624 "y.tab.c"
     break;
 
   case 31:
-#line 169 "lab6.y"
+#line 170 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1629 "y.tab.c"
+#line 1630 "y.tab.c"
     break;
 
   case 32:
-#line 170 "lab6.y"
+#line 171 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1635 "y.tab.c"
+#line 1636 "y.tab.c"
     break;
 
   case 33:
-#line 171 "lab6.y"
+#line 172 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1641 "y.tab.c"
+#line 1642 "y.tab.c"
     break;
 
   case 34:
-#line 172 "lab6.y"
+#line 173 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1647 "y.tab.c"
+#line 1648 "y.tab.c"
     break;
 
   case 35:
-#line 175 "lab6.y"
+#line 176 "lab6.y"
     {(yyval.node) = ASTcreatenode(EXPRSTMT);
 	       			 (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1654 "y.tab.c"
+#line 1655 "y.tab.c"
     break;
 
   case 36:
-#line 177 "lab6.y"
-    {(yyval.node) = NULL;
-		      (yyval.node) = ASTcreatenode(EXPRSTMT);
+#line 178 "lab6.y"
+    { (yyval.node) = ASTcreatenode(EXPRSTMT);
 		      (yyval.node) -> s1 = NULL;}
 #line 1662 "y.tab.c"
     break;
@@ -1666,279 +1666,288 @@ yyreduce:
     {(yyval.node) = ASTcreatenode(IFSTMT);
 	   				       (yyval.node) -> s1 = (yyvsp[-2].node);
 					       (yyval.node) -> s2 = ASTcreatenode(IFELSE);
-					       (yyval.node) -> s2 -> s1 = (yyvsp[-2].node);
-					       (yyval.node) -> s2 -> s2 = NULL;}
-#line 1672 "y.tab.c"
+					       (yyval.node) -> s2 -> s1 = (yyvsp[0].node);}
+#line 1671 "y.tab.c"
     break;
 
   case 38:
-#line 187 "lab6.y"
+#line 186 "lab6.y"
     {(yyval.node) = ASTcreatenode(IFSTMT);
 							      (yyval.node) -> s1 = (yyvsp[-4].node);
 							      (yyval.node) -> s2 = ASTcreatenode(IFELSE);
 					 		      (yyval.node) -> s2 -> s1 = (yyvsp[-2].node);
 							      (yyval.node) -> s2 -> s2 = (yyvsp[0].node);}
-#line 1682 "y.tab.c"
+#line 1681 "y.tab.c"
     break;
 
   case 39:
-#line 194 "lab6.y"
+#line 193 "lab6.y"
     {(yyval.node) = ASTcreatenode(WHILESTMT);
 	       					(yyval.node) -> s1 = (yyvsp[-2].node);
 						(yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1690 "y.tab.c"
+#line 1689 "y.tab.c"
     break;
 
   case 40:
-#line 199 "lab6.y"
+#line 198 "lab6.y"
     {(yyval.node) = ASTcreatenode(RETURNSTMT);
 	       		       (yyval.node) -> s1 = NULL;}
-#line 1697 "y.tab.c"
+#line 1696 "y.tab.c"
     break;
 
   case 41:
-#line 201 "lab6.y"
+#line 200 "lab6.y"
     {(yyval.node) = ASTcreatenode(RETURNSTMT);
 					  (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1704 "y.tab.c"
+#line 1703 "y.tab.c"
     break;
 
   case 42:
-#line 205 "lab6.y"
+#line 204 "lab6.y"
     {(yyval.node) = ASTcreatenode(READSTMT);
 	       			    (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1711 "y.tab.c"
+#line 1710 "y.tab.c"
     break;
 
   case 43:
-#line 209 "lab6.y"
+#line 208 "lab6.y"
     {(yyval.node) = ASTcreatenode(WRITESTMT);
 	       			       (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1718 "y.tab.c"
+#line 1717 "y.tab.c"
     break;
 
   case 44:
-#line 213 "lab6.y"
+#line 212 "lab6.y"
     {(yyval.node) = ASTcreatenode(ASSIGNSTMT);
 	       					    (yyval.node) -> s1 = (yyvsp[-3].node);
 						    (yyval.node) -> s2 = (yyvsp[-1].node);}
-#line 1726 "y.tab.c"
+#line 1725 "y.tab.c"
     break;
 
   case 45:
-#line 218 "lab6.y"
+#line 217 "lab6.y"
     {(yyval.node)= (yyvsp[0].node);}
-#line 1732 "y.tab.c"
+#line 1731 "y.tab.c"
     break;
 
   case 46:
-#line 221 "lab6.y"
+#line 220 "lab6.y"
     {(yyval.node) = ASTcreatenode(IDENTIFIER);
 	       	     (yyval.node) -> name = (yyvsp[0].str);
 		     (yyval.node) -> s1 = NULL;}
-#line 1740 "y.tab.c"
+#line 1739 "y.tab.c"
     break;
 
   case 47:
-#line 224 "lab6.y"
+#line 223 "lab6.y"
     {(yyval.node) = ASTcreatenode(IDENTIFIER);
 					(yyval.node) -> name = (yyvsp[-3].str);
 					(yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1748 "y.tab.c"
+#line 1747 "y.tab.c"
     break;
 
   case 48:
-#line 229 "lab6.y"
+#line 228 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1754 "y.tab.c"
+#line 1753 "y.tab.c"
     break;
 
   case 49:
-#line 230 "lab6.y"
+#line 229 "lab6.y"
     {(yyval.node) = ASTcreatenode(EXPR);
 							      (yyval.node) -> s1 = (yyvsp[-2].node);
 							      (yyval.node) -> operator = (yyvsp[-1].operator);
 							      (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1763 "y.tab.c"
+#line 1762 "y.tab.c"
     break;
 
   case 50:
-#line 236 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1769 "y.tab.c"
+#line 235 "lab6.y"
+    {(yyval.operator) = LESSTHANEQ;}
+#line 1768 "y.tab.c"
     break;
 
   case 51:
-#line 237 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1775 "y.tab.c"
+#line 236 "lab6.y"
+    {(yyval.operator) = LESSTHAN;}
+#line 1774 "y.tab.c"
     break;
 
   case 52:
-#line 238 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1781 "y.tab.c"
+#line 237 "lab6.y"
+    {(yyval.operator) = GREATERTHAN;}
+#line 1780 "y.tab.c"
     break;
 
   case 53:
-#line 239 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1787 "y.tab.c"
+#line 238 "lab6.y"
+    {(yyval.operator) = GREATERTHANEQ;}
+#line 1786 "y.tab.c"
     break;
 
   case 54:
-#line 240 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1793 "y.tab.c"
+#line 239 "lab6.y"
+    {(yyval.operator) = EQUAL;}
+#line 1792 "y.tab.c"
     break;
 
   case 55:
-#line 241 "lab6.y"
-    {(yyval.operator) = (yyvsp[0].val);}
-#line 1799 "y.tab.c"
+#line 240 "lab6.y"
+    {(yyval.operator) = NOTEQUAL;}
+#line 1798 "y.tab.c"
     break;
 
   case 56:
-#line 244 "lab6.y"
+#line 243 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1805 "y.tab.c"
+#line 1804 "y.tab.c"
     break;
 
   case 57:
-#line 245 "lab6.y"
+#line 244 "lab6.y"
     {(yyval.node) = ASTcreatenode(EXPR);
 		   				    (yyval.node) -> s1 = (yyvsp[-2].node);
 						    (yyval.node) -> operator = (yyvsp[-1].operator);
 						    (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1814 "y.tab.c"
+#line 1813 "y.tab.c"
     break;
 
   case 58:
-#line 251 "lab6.y"
+#line 250 "lab6.y"
     {(yyval.operator) = PLUS;}
-#line 1820 "y.tab.c"
+#line 1819 "y.tab.c"
     break;
 
   case 59:
-#line 252 "lab6.y"
+#line 251 "lab6.y"
     {(yyval.operator) = MINUS;}
-#line 1826 "y.tab.c"
+#line 1825 "y.tab.c"
     break;
 
   case 60:
-#line 255 "lab6.y"
+#line 254 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1832 "y.tab.c"
+#line 1831 "y.tab.c"
     break;
 
   case 61:
-#line 256 "lab6.y"
+#line 255 "lab6.y"
     {(yyval.node) = ASTcreatenode(EXPR);
 					 (yyval.node) -> s1 = (yyvsp[-2].node);
 					 (yyval.node) -> operator = (yyvsp[-1].operator);
 					 (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1841 "y.tab.c"
+#line 1840 "y.tab.c"
     break;
 
   case 62:
-#line 262 "lab6.y"
+#line 261 "lab6.y"
     {(yyval.operator) = MULTI;}
-#line 1847 "y.tab.c"
+#line 1846 "y.tab.c"
     break;
 
   case 63:
-#line 263 "lab6.y"
+#line 262 "lab6.y"
     {(yyval.operator) = DIV;}
-#line 1853 "y.tab.c"
+#line 1852 "y.tab.c"
     break;
 
   case 64:
-#line 264 "lab6.y"
-    {(yyval.operator) = AND;}
-#line 1859 "y.tab.c"
+#line 263 "lab6.y"
+    {(yyval.operator) = MYAND;}
+#line 1858 "y.tab.c"
     break;
 
   case 65:
-#line 265 "lab6.y"
-    {(yyval.operator) = OR;}
-#line 1865 "y.tab.c"
+#line 264 "lab6.y"
+    {(yyval.operator) = MYOR;}
+#line 1864 "y.tab.c"
     break;
 
   case 66:
-#line 268 "lab6.y"
+#line 267 "lab6.y"
     {(yyval.node) = (yyvsp[-1].node);}
-#line 1871 "y.tab.c"
+#line 1870 "y.tab.c"
     break;
 
   case 67:
-#line 269 "lab6.y"
+#line 268 "lab6.y"
     {(yyval.node) = ASTcreatenode(NUMBER);
 			  (yyval.node) -> value = (yyvsp[0].val);}
-#line 1878 "y.tab.c"
+#line 1877 "y.tab.c"
     break;
 
   case 68:
-#line 271 "lab6.y"
+#line 270 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1884 "y.tab.c"
+#line 1883 "y.tab.c"
     break;
 
   case 69:
-#line 272 "lab6.y"
+#line 271 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1890 "y.tab.c"
+#line 1889 "y.tab.c"
     break;
 
   case 70:
-#line 273 "lab6.y"
-    {(yyval.node) -> value = 1;}
+#line 272 "lab6.y"
+    {(yyval.node) = ASTcreatenode(NUMBER);
+		           (yyval.node) -> value = 1;}
 #line 1896 "y.tab.c"
     break;
 
   case 71:
 #line 274 "lab6.y"
-    {(yyval.node) -> value = 0;}
-#line 1902 "y.tab.c"
+    {(yyval.node) = ASTcreatenode(NUMBER);
+		            (yyval.node) -> value = 0;}
+#line 1903 "y.tab.c"
+    break;
+
+  case 72:
+#line 276 "lab6.y"
+    {(yyval.node) = ASTcreatenode(EXPR);
+				 (yyval.node) -> operator = MYNOT;
+				 (yyval.node) -> s1 = (yyvsp[0].node);}
+#line 1911 "y.tab.c"
     break;
 
   case 73:
-#line 278 "lab6.y"
+#line 281 "lab6.y"
     {(yyval.node) = ASTcreatenode(CALL);
 		   		      (yyval.node) -> name = (yyvsp[-3].str);
 				      (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1910 "y.tab.c"
+#line 1919 "y.tab.c"
     break;
 
   case 74:
-#line 283 "lab6.y"
+#line 286 "lab6.y"
     {(yyval.node) = NULL;}
-#line 1916 "y.tab.c"
+#line 1925 "y.tab.c"
     break;
 
   case 75:
-#line 284 "lab6.y"
+#line 287 "lab6.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1922 "y.tab.c"
+#line 1931 "y.tab.c"
     break;
 
   case 76:
-#line 287 "lab6.y"
+#line 290 "lab6.y"
     {(yyval.node) = ASTcreatenode(ARGSLIST);
 		   		 (yyval.node) -> s1 = (yyvsp[0].node);
 				 (yyval.node) -> next = NULL;}
-#line 1930 "y.tab.c"
+#line 1939 "y.tab.c"
     break;
 
   case 77:
-#line 290 "lab6.y"
+#line 293 "lab6.y"
     {(yyval.node) = ASTcreatenode(ARGSLIST);
 					     (yyval.node) -> s1 = (yyvsp[-2].node);
 					     (yyval.node) -> next = (yyvsp[0].node);}
-#line 1938 "y.tab.c"
+#line 1947 "y.tab.c"
     break;
 
 
-#line 1942 "y.tab.c"
+#line 1951 "y.tab.c"
 
       default: break;
     }
@@ -2170,9 +2179,12 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 294 "lab6.y"
+#line 297 "lab6.y"
 	/* end of rules, start of program */
 
-int main()
-{ yyparse();
+int main(int argv, char *arg[])
+{ 
+  yyparse();
+  fprintf(stderr, "The input has been checked.");
+  ASTprint(program, 0);
 }
