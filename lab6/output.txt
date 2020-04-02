@@ -1,0 +1,96 @@
+VARIABLE void  x
+VARIABLE int  x[100]
+FUNCTION int FUNCTION main 
+(void)
+  BLOCK 
+    VARIABLE int  x
+    BLOCK 
+      VARIABLE int  y
+      WHILE 
+        <= 
+          PLUS 
+            ID x 
+            DIVIDE 
+              NUMBER WITH VALUE 5 
+              NUMBER WITH VALUE 2 
+          MINUS 
+            PLUS 
+              NUMBER WITH VALUE 2 
+              ID z 
+            NUMBER WITH VALUE 5 
+        IF 
+          >= 
+            MINUS 
+              ID h 
+              NUMBER WITH VALUE 2 
+            MINUS 
+              NUMBER WITH VALUE 3 
+              NUMBER WITH VALUE 2 
+          READ 
+            ID x 
+            array ref [ 
+              NUMBER WITH VALUE 100 
+            ] 
+        ELSE 
+          WRITE 
+            PLUS 
+              ID x 
+              array ref [ 
+                NUMBER WITH VALUE 100 
+              ] 
+              NUMBER WITH VALUE 200 
+      EXPRESSION STATEMENT 
+        CALL: f 
+          ARGLIST 
+            PLUS 
+              NUMBER WITH VALUE 3 
+              ID x 
+              array ref [ 
+                ID x 
+                array ref [ 
+                  NUMBER WITH VALUE 100 
+                ] 
+              ] 
+          ARGLIST 
+            PLUS 
+              ID bar 
+              NUMBER WITH VALUE 200 
+          ARGLIST 
+            NUMBER WITH VALUE 20 
+      WRITE empty 
+      WRITE WITH EXPRESSION 
+        PLUS 
+          PLUS 
+            ID x 
+            NUMBER WITH VALUE 5 
+          NUMBER WITH VALUE 7 
+      IF 
+        > 
+          PLUS 
+            ID x 
+            NUMBER WITH VALUE 10 
+          TIMES 
+            NUMBER WITH VALUE 10 
+            NUMBER WITH VALUE 20 
+        ASSIGNMENT 
+          ID x 
+          != 
+            ID x 
+            NUMBER WITH VALUE 10 
+      WRITE 
+        NOT 
+          OR 
+            AND 
+              NUMBER WITH VALUE 3 
+              NUMBER WITH VALUE 5 
+            AND 
+              NUMBER WITH VALUE 1 
+              NOT 
+                NUMBER WITH VALUE 0 
+FUNCTION void FUNCTION f 
+(
+  PARAMS int x 
+  PARAMS int y 
+  PARAMS void z 
+)
+  BLOCK 

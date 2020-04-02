@@ -38,6 +38,8 @@
 	 -removed symbol table and calculator rules
 	 -added rulesets for variables/IDs
 	 -added CFG rules for Algol-C language definition
+	Changes made: (04.01.20):
+	 -added semantic actions for creating AST
 */
 
 
@@ -90,17 +92,17 @@ dec     : vardec {$$ = $1;}/*declaration → var-declaration | fun-declaration*/
         | fundec {$$ = $1;}
         ;
         
-vardec   : typespec varlist ';' /*vardec*/ {$$ = $2;
+vardec   : typespec varlist ';' /*vardec*/ {$$ = $2; /*when we find a varlist, we point to typespec, then loop through the varlist to set the type*/
 					    ASTnode * p = $$;
 				            while(p != NULL){
 					      p -> operator = $1;
 					      p = p -> s1;}}
 	 ;
          
-varlist  : ID /*vardec*/ {$$ = ASTcreatenode(VARDEC);
+varlist  : ID /*vardec*/ {$$ = ASTcreatenode(VARDEC); /*vars can be a single variable, and array, or either of those followed by a varlist*/
                           $$ -> name = $1;}
 			   
-         | ID '[' NUM ']'/* {fprintf(stderr, "Const found %d\n", $3);*/
+         | ID '[' NUM ']'
 			  	    {$$ = ASTcreatenode(VARDEC);
 			  	     $$ -> name = $1;
 			  	     $$ -> value = $3;}
@@ -110,22 +112,22 @@ varlist  : ID /*vardec*/ {$$ = ASTcreatenode(VARDEC);
          | ID '[' NUM ']' ',' varlist {$$ = ASTcreatenode(VARDEC);
 				       $$ -> name = $1;
 				       $$ -> value = $3;
-				       $$ -> s1 = $6;} /*{fprintf(stderr, "Const found %d\n", $3);}*/
+				       $$ -> s1 = $6;}
          ;
          
-typespec : INT {$$ = INTTYPE;
+typespec : INT {$$ = INTTYPE; /*integer type*/
 	    }
-         | VOID {$$ = VOIDTYPE;
+         | VOID {$$ = VOIDTYPE; /*void type*/
 		   }
-         | BOOLEAN {$$ = BOOLTYPE;
+         | BOOLEAN {$$ = BOOLTYPE; /*boolean type*/
 		      }
          ;
          
-fundec   : typespec ID '(' params ')' compoundstmt {$$ = ASTcreatenode(FUNDEC);
-						    $$ -> operator = $1;
-						    $$ -> name = $2;
-						    $$ -> s1 = $4;
-						    $$ -> s2 = $6;} /*function declaration*/
+fundec   : typespec ID '(' params ')' compoundstmt {$$ = ASTcreatenode(FUNDEC);/*function delcaration*/
+						    $$ -> operator = $1;/*this is typespec*/
+						    $$ -> name = $2; /*this is ID*/
+						    $$ -> s1 = $4; /*this is params*/
+						    $$ -> s2 = $6;} /*this is compound stmt*/
          ;
          
 params   : VOID {$$ = NULL;} /*parameters*/
@@ -137,168 +139,168 @@ paramlist : param {$$ = $1;} /*parameters list*/
 				 $$ -> next = $3;}
           ;
           
-param     : typespec ID {$$ = ASTcreatenode(PARAM);
+param     : typespec ID {$$ = ASTcreatenode(PARAM); /*param; when we het here, create PARAM node and set operator and name*/
 	  		 $$ -> operator = $1;
 			 $$ -> name = $2;}
-          | typespec ID '[' NUM ']' {$$ = ASTcreatenode(PARAM);
+          | typespec ID '[' NUM ']' {$$ = ASTcreatenode(PARAM); /*array param; create PARAM node, set operator, name, and value*/
 				     $$ -> operator = $1;
 				     $$ -> name = $2;
 				     $$ -> value = $4;}
           ;
           
-compoundstmt : MYBEGIN localdec statementlist END {$$ = ASTcreatenode(BLOCK);
+compoundstmt : MYBEGIN localdec statementlist END {$$ = ASTcreatenode(BLOCK); /*create BLOCK node and point s1 and s2 to localdec and statementlist, repsectively*/
 							$$ -> s1 = $2;
 							$$ -> s2 = $3;
 						   }
              ;
              
-localdec     : /*localdec*/ /*empty*/ {$$ = NULL;}
+localdec     : /*localdec*/ /*empty*/ {$$ = NULL;} /*localdec; if not empty, point next of vardec to localdec, then set $$ to vardec (which tells the program to look at the rules for vardec and go from there*/
              | vardec localdec {$1 -> next = $2; $$ = $1;}
              ;
              
-statementlist : /*statement list*/ /*empty*/ {$$ = NULL;}
+statementlist : /*statement list*/ /*empty*/ {$$ = NULL;} /*when not empty, set next of statement to statementlist, then set $$ to statement*/
               | statement statementlist {
 						$1 -> next = $2;
 						$$ = $1;
 					}
               ;
               
-statement     : expressionstmt {$$ = $1;}
-              | compoundstmt {$$ = $1;}
-              | selectionstmt {$$ = $1;}
-              | iterationstmt {$$ = $1;}
-              | assignmentstmt {$$ = $1;}
-              | returnstmt {$$ = $1;}
-              | readstmt {$$ = $1;}
-              | writestmt {$$ = $1;}
+statement     : expressionstmt {$$ = $1;} /*expressionstmt*/
+              | compoundstmt {$$ = $1;} /*coumpoundstmt*/
+              | selectionstmt {$$ = $1;} /*selectionstmt*/
+              | iterationstmt {$$ = $1;} /*iterationstmt*/
+              | assignmentstmt {$$ = $1;} /*assignmentstmt*/
+              | returnstmt {$$ = $1;} /*returnstmt*/
+              | readstmt {$$ = $1;} /*readstmt*/
+              | writestmt {$$ = $1;} /*writestmt*/
               ;
 
-expressionstmt : expression ';' {$$ = ASTcreatenode(EXPRSTMT);
+expressionstmt : expression ';' {$$ = ASTcreatenode(EXPRSTMT); /*create expression statement node, then point s1 to expression*/
 	       			 $$ -> s1 = $1;}
-               | ';' { $$ = ASTcreatenode(EXPRSTMT);
+               | ';' { $$ = ASTcreatenode(EXPRSTMT); /*point s1 to null if there is no expression following*/
 		      $$ -> s1 = NULL;}
                ;
                
-selectionstmt  : IF expression THEN statement {$$ = ASTcreatenode(IFSTMT);
+selectionstmt  : IF expression THEN statement {$$ = ASTcreatenode(IFSTMT); /*if statement, with no else*/
 	   				       $$ -> s1 = $2;
 					       $$ -> s2 = ASTcreatenode(IFELSE);
 					       $$ -> s2 -> s1 = $4;}
-               | IF expression THEN statement ELSE statement {$$ = ASTcreatenode(IFSTMT);
+               | IF expression THEN statement ELSE statement {$$ = ASTcreatenode(IFSTMT); /*if statement, with an else*/
 							      $$ -> s1 = $2;
 							      $$ -> s2 = ASTcreatenode(IFELSE);
 					 		      $$ -> s2 -> s1 = $4;
 							      $$ -> s2 -> s2 = $6;}
                ;
                
-iterationstmt  : WHILE expression DO statement {$$ = ASTcreatenode(WHILESTMT);
+iterationstmt  : WHILE expression DO statement {$$ = ASTcreatenode(WHILESTMT); /*while loop*/
 	       					$$ -> s1 = $2;
 						$$ -> s2 = $4;}
                ;
                
-returnstmt     : MYRETURN ';' {$$ = ASTcreatenode(RETURNSTMT);
+returnstmt     : MYRETURN ';' {$$ = ASTcreatenode(RETURNSTMT); /*return statement*/
 	       		       $$ -> s1 = NULL;}
                | MYRETURN expression ';' {$$ = ASTcreatenode(RETURNSTMT);
 					  $$ -> s1 = $2;}
                ;
                
-readstmt       : READ variable ';' {$$ = ASTcreatenode(READSTMT);
+readstmt       : READ variable ';' {$$ = ASTcreatenode(READSTMT); /*read statement*/
 	       			    $$ -> s1 = $2;}
                ;
 
-writestmt      : WRITE expression ';' {$$ = ASTcreatenode(WRITESTMT);
+writestmt      : WRITE expression ';' {$$ = ASTcreatenode(WRITESTMT); /*write statement*/
 	       			       $$ -> s1 = $2;}
                ;
                
-assignmentstmt : variable '=' simpleexpression ';' {$$ = ASTcreatenode(ASSIGNSTMT);
+assignmentstmt : variable '=' simpleexpression ';' {$$ = ASTcreatenode(ASSIGNSTMT); /*assignment; point s1 to variable, point s2 to simpleexpression*/
 	       					    $$ -> s1 = $1;
 						    $$ -> s2 = $3;}
                ;
                
-expression     : simpleexpression {$$= $1;}
+expression     : simpleexpression {$$= $1;} /*expression*/
                ;
                
-variable       : ID {$$ = ASTcreatenode(IDENTIFIER);
+variable       : ID {$$ = ASTcreatenode(IDENTIFIER); /*variable; create IDENTIFIER node, then set its name to ID, and point s1 to null since it has nothing following it*/
 	       	     $$ -> name = $1;
 		     $$ -> s1 = NULL;}
-               | ID '[' expression ']' {$$ = ASTcreatenode(IDENTIFIER);
+               | ID '[' expression ']' {$$ = ASTcreatenode(IDENTIFIER); /*do the same as before, but point s1 to expression now*/
 					$$ -> name = $1;
 					$$ -> s1 = $3;}
                ;
                
-simpleexpression : additiveexpression {$$ = $1;}
-                 | simpleexpression relop additiveexpression {$$ = ASTcreatenode(EXPR);
+simpleexpression : additiveexpression {$$ = $1;} /*simple expression*/
+                 | simpleexpression relop additiveexpression {$$ = ASTcreatenode(EXPR); /*create EXPRnode and point s1 to simpleexpression, operator to relop, and s2 to additiveexpression*/
 							      $$ -> s1 = $1;
 							      $$ -> operator = $2;
 							      $$ -> s2 = $3;}
                  ;
                  
-relop            : LE {$$ = LESSTHANEQ;}
-                 | LT {$$ = LESSTHAN;}
-                 | GT {$$ = GREATERTHAN;}
-                 | GE {$$ = GREATERTHANEQ;}
-                 | EQ {$$ = EQUAL;}
-                 | NE {$$ = NOTEQUAL;}
+relop            : LE {$$ = LESSTHANEQ;} /*less than or equal*/
+                 | LT {$$ = LESSTHAN;} /*less than*/
+                 | GT {$$ = GREATERTHAN;} /*greater than*/
+                 | GE {$$ = GREATERTHANEQ;} /*greater than or equal*/
+                 | EQ {$$ = EQUAL;} /*equal*/
+                 | NE {$$ = NOTEQUAL;} /*not equal*/
                  ;
                  
-additiveexpression : term {$$ = $1;}
-		   | additiveexpression addop term {$$ = ASTcreatenode(EXPR);
+additiveexpression : term {$$ = $1;} /*term*/
+		   | additiveexpression addop term {$$ = ASTcreatenode(EXPR); /*create EXPR node and point s1 to additiveexpression, operator to addop, and s2 to term*/
 		   				    $$ -> s1 = $1;
 						    $$ -> operator = $2;
 						    $$ -> s2 = $3;}
                    ;
                    
-addop              : '+' {$$ = PLUS;}
-                   | '-' {$$ = MINUS;}
+addop              : '+' {$$ = PLUS;} /*plus operator*/
+                   | '-' {$$ = MINUS;} /*minus operator*/
                    ;
                    
-term               : factor {$$ = $1;}
-                   | term multop factor {$$ = ASTcreatenode(EXPR);
+term               : factor {$$ = $1;} /*term*/
+                   | term multop factor {$$ = ASTcreatenode(EXPR); /*create EXPR node, point s1 to term, operator to multop, and s2 to factor*/
 					 $$ -> s1 = $1;
 					 $$ -> operator = $2;
 					 $$ -> s2 = $3;}
                    ;
                    
-multop             : '*' {$$ = MULTI;}
-                   | '/' {$$ = DIV;}
-                   | AND {$$ = MYAND;}
-                   | OR  {$$ = MYOR;}
+multop             : '*' {$$ = MULTI;} /*multiply*/
+                   | '/' {$$ = DIV;} /*divide*/
+                   | AND {$$ = MYAND;} /*and; and is a reserved word, so you should create your own and type*/
+                   | OR  {$$ = MYOR;} /*or; or is a reserved word as well, so you should do what you did with and*/
                    ;
                 
-factor             : '(' expression ')' {$$ = $2;}
-                   | NUM {$$ = ASTcreatenode(NUMBER);
+factor             : '(' expression ')' {$$ = $2;} /*expression*/
+                   | NUM {$$ = ASTcreatenode(NUMBER); /*number*/
 			  $$ -> value = $1;}
-                   | variable {$$ = $1;}
-                   | call {$$ = $1;}
-                   | TRUE {$$ = ASTcreatenode(NUMBER);
+                   | variable {$$ = $1;} /*variable*/
+                   | call {$$ = $1;} /*function call*/
+                   | TRUE {$$ = ASTcreatenode(NUMBER); /*true result of if-else statement; this is set to one*/
 		           $$ -> value = 1;}
-                   | FALSE {$$ = ASTcreatenode(NUMBER);
+                   | FALSE {$$ = ASTcreatenode(NUMBER); /*false result of if-else statement; this is set to zero*/
 		            $$ -> value = 0;}
-                   | NOT factor {$$ = ASTcreatenode(EXPR);
+                   | NOT factor {$$ = ASTcreatenode(EXPR); /*create EXPR node, point operator to your own NOT type (as not is a reserved word) and s1 to factor*/
 				 $$ -> operator = MYNOT;
 				 $$ -> s1 = $2;}
                    ;
                    
-call               : ID '(' args ')' {$$ = ASTcreatenode(CALL);
+call               : ID '(' args ')' {$$ = ASTcreatenode(CALL); /*function call; point name to ID, and s1 to args*/
 		   		      $$ -> name = $1;
 				      $$ -> s1 = $3;}
                    ;
 
 args               : /*empty*/ {$$ = NULL;}
-                   | arglist {$$ = $1;}
+                   | arglist {$$ = $1;} /*arglist*/
                    ;
                    
-arglist            : expression {$$ = ASTcreatenode(ARGSLIST);
+arglist            : expression {$$ = ASTcreatenode(ARGSLIST); /*create ARGSLIST node, point s1 to expression and next of arglist to null*/
 		   		 $$ -> s1 = $1;
 				 $$ -> next = NULL;}
-                   | expression ',' arglist {$$ = ASTcreatenode(ARGSLIST);
+                   | expression ',' arglist {$$ = ASTcreatenode(ARGSLIST); /*do the same thing here, except now next should point to arglist*/
 					     $$ -> s1 = $1;
 					     $$ -> next = $3;}
                    ;
 %%	/* end of rules, start of program */
 
-int main(int argv, char *arg[])
+int main(int argv, char *arg[]) /*main; call ASTprint, feed it program and 0*/
 { 
   yyparse();
-  fprintf(stderr, "The input has been checked.");
+  fprintf(stderr, "The input has been syntactically checked.");
   ASTprint(program, 0);
 }

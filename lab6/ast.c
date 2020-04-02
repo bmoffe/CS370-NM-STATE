@@ -5,7 +5,7 @@
 static int mydebug;
 
 
-void printspace(int num){
+void printspace(int num){//print spaces
 	int i;
 	for (i = 0; i < num; i++){
 		printf("  ");
@@ -13,7 +13,7 @@ void printspace(int num){
 }
 
 
-void printtype(enum OPERATORS op){
+void printtype(enum OPERATORS op){//print types
 
      if(op == INTTYPE){
           printf("int ");
@@ -28,22 +28,22 @@ void printtype(enum OPERATORS op){
 }
 
 
-void ASTprint(ASTnode *p, int level){
+void ASTprint(ASTnode *p, int level){//ASTprint fucntion
 	int i;
 	//printf("I am here.\n");
 	if (p == NULL){return;}
 	printspace(level);
-			switch (p->type){
-				case VARDEC: printf("var ");
+			switch (p->type){ //switch for each node case
+				case VARDEC: printf("VARIABLE ");//vardec
 					     printtype(p -> operator);
 					     printf(" %s", p->name);
-					     if (p -> value > 0){
+					     if (p -> value > 0){//if variable is array
 						     printf("[%d]", p -> value);
 					     }
 					     printf("\n");
 					     ASTprint(p -> s1, level);
 					     break;
-				case FUNDEC: printf("function ");
+				case FUNDEC: printf("FUNCTION "); //function
 					     printtype(p -> operator);
 					     printf("FUNCTION %s \n", p -> name);
 					     if (p -> s1 == NULL){
@@ -57,110 +57,110 @@ void ASTprint(ASTnode *p, int level){
 					     printf("\n");
 					     ASTprint(p -> s2, level + 1);
 					     break;
-				case PARAM: printf("params ");
+				case PARAM: printf("PARAMS ");//params
 					    printtype(p -> operator);
 					     printf("%s \n", p -> name);
 					     ASTprint(p -> s1, level + 1);
 					     break;
-			        case BLOCK: printf("block \n");
+			        case BLOCK: printf("BLOCK \n");//block
 					    ASTprint(p -> s1, level + 1);
 					    ASTprint(p -> s2, level + 1);
 					    break;
-				case ASSIGNSTMT: printf("assign \n");
+				case ASSIGNSTMT: printf("ASSIGNMENT \n");//assignment
 					         ASTprint(p -> s1, level + 1);
 					         ASTprint(p -> s2, level + 1);
 					         break;
-			        case IFSTMT: printf("if \n");
+			        case IFSTMT: printf("IF \n");//if statement
 					     ASTprint(p -> s1, level + 1);
 					     ASTprint(p -> s2 -> s1, level + 1);
 					     if (p -> s2 -> s2 != NULL){
 						            printspace(level);
-							    printf("else \n");
+							    printf("ELSE \n");
 							    ASTprint(p -> s2 -> s2, level + 1);
 					     }
 					     break;
-				case WHILESTMT: printf("while \n");
+				case WHILESTMT: printf("WHILE \n");//while
 				                ASTprint(p -> s1, level + 1);
 				                ASTprint(p -> s2, level + 1);
 					        break;
-				case ARGSLIST: printf("arg list \n");
+				case ARGSLIST: printf("ARGLIST \n");//argslist
 					       ASTprint(p -> s1, level + 1);
 					       break;
-			        case WRITESTMT: printf("write \n");
+			        case WRITESTMT: printf("WRITE \n");//write
 				                ASTprint(p -> s1, level + 1);
 				                break;
-				case READSTMT: printf("read \n");
+				case READSTMT: printf("READ \n");//read
 					       ASTprint(p -> s1, level + 1);
 					       break;
-				case RETURNSTMT:printf("return ");
+				case RETURNSTMT:printf("WRITE ");//return
 					         if (p -> s1 == NULL){
 							 printf("empty \n");
 						 }
 						 else{
-							 printf("with expr \n");
+							 printf("WITH EXPRESSION \n");//return with expression
 							 ASTprint(p -> s1, level + 1);
 						 }
 						 break;
-				case CALL: printf("call: %s \n", p -> name);
+				case CALL: printf("CALL: %s \n", p -> name);//function call
 					   ASTprint(p -> s1, level + 1);
 					   break;
-				case EXPRSTMT: printf("expr statement \n");
+				case EXPRSTMT: printf("EXPRESSION STATEMENT \n");//expression
 					       ASTprint(p -> s1, level + 1);
 					       break;
 				case EXPR:
-					   if (p -> operator == PLUS){
-						   printf("plus op \n");
+					   if (p -> operator == PLUS){//plus
+						   printf("PLUS \n");
 					   }
-					   if (p -> operator == MINUS){
-						   printf("minus op \n");
+					   if (p -> operator == MINUS){//minus
+						   printf("MINUS \n");
 					   }
-					   if (p -> operator == MULTI){
-						   printf("multiply op \n");
+					   if (p -> operator == MULTI){//multiply
+						   printf("TIMES \n");
 					   }
-					   if (p -> operator == DIV){
-						   printf("div op \n");
+					   if (p -> operator == DIV){//divide
+						   printf("DIVIDE \n");
 					   }
-					   if (p -> operator == LESSTHANEQ){
+					   if (p -> operator == LESSTHANEQ){//less than or equal
 						   printf("<= \n");
 					   }
-					   if (p -> operator == GREATERTHANEQ){
+					   if (p -> operator == GREATERTHANEQ){//greater than or equal
 						   printf(">= \n");
 					   }
-					   if (p -> operator == LESSTHAN){
+					   if (p -> operator == LESSTHAN){//less than
 						   printf("< \n");
 					   }
-					   if (p -> operator == GREATERTHAN){
+					   if (p -> operator == GREATERTHAN){//greater than
 						   printf("> \n");
 					   }
-					   if (p -> operator == EQUAL){
+					   if (p -> operator == EQUAL){//equal
 						   printf("= \n");
 					   }
-					   if (p -> operator == NOTEQUAL){
+					   if (p -> operator == NOTEQUAL){//not equal
 						   printf("!= \n");
 					   }
-					   if (p -> operator == MYNOT){
+					   if (p -> operator == MYNOT){//not
 						   printf("NOT \n");
 					   }
-					   if (p -> operator == MYAND){
+					   if (p -> operator == MYAND){//and
 						   printf("AND \n");
 					   }
-					   if (p -> operator == MYOR){
+					   if (p -> operator == MYOR){//or
 						   printf("OR \n");
 					   }
 					   ASTprint(p -> s1, level + 1);
 					   ASTprint(p -> s2, level + 1);
 					   break;
-				case NUMBER: /*printspace(level);*/
-					     printf("num with val %d \n", p -> value);
+				case NUMBER: /*printspace(level);*/ //number
+					     printf("NUMBER WITH VALUE %d \n", p -> value);
 					     ASTprint(p -> s1, level + 1);
 					     break;
-				case IDENTIFIER:
-					  if (p -> s1 == NULL){
-						  printf("id %s \n", p -> name);
+				case IDENTIFIER: //identifier
+					  if (p -> s1 == NULL){//non-array variable
+						  printf("ID %s \n", p -> name);
 						  ASTprint(p -> s1, level + 1);
 					  }
-					  else {
-						  printf("id %s \n", p -> name);
+					  else { //array variable
+						  printf("ID %s \n", p -> name);
 						  printspace(level);
 						  printf("array ref [ \n");
 						  ASTprint(p -> s1, level + 1);
@@ -168,14 +168,14 @@ void ASTprint(ASTnode *p, int level){
 						  printf("] \n");/*array end*/
 					  }
 					  break;
-				default: printf("unknown type");
+				default: printf("unknown type"); //default
 			}//END OF SWTICH
-			ASTprint(p -> next, level);
+			ASTprint(p -> next, level);//recursive call to ASTprint
 }
 
 
 
-ASTnode *ASTcreatenode(enum ASTtype newtype){
+ASTnode *ASTcreatenode(enum ASTtype newtype){ //creates new node
 	ASTnode *p	;
 	if (mydebug) fprintf(stderr, "creating node \n");
 	p = (ASTnode *) malloc(sizeof(ASTnode));
