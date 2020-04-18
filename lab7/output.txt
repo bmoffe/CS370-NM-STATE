@@ -1,0 +1,204 @@
+
+	LABEL		Offset 	 LEVEL
+	Z		0		0	unknown type
+
+	LABEL		Offset 	 LEVEL
+	y		100		0	unknown type
+	Z		0		0	unknown type
+
+	LABEL		Offset 	 LEVEL
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+Block level is 1
+
+	LABEL		Offset 	 LEVEL
+	y		0		1	unknown type
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+Block level is 2
+
+	LABEL		Offset 	 LEVEL
+	x		1		2	unknown type
+	y		0		1	INT
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	_T1		11		2	INT
+	_T0		11		2	INT
+	x		1		2	INT
+	y		0		1	INT
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+Block level is 2
+
+	LABEL		Offset 	 LEVEL
+	x		0		2	unknown type
+	y		0		1	INT
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	_T3		10		2	INT
+	_T2		10		2	INT
+	x		0		2	INT
+	y		0		1	INT
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	y		0		1	INT
+	f		102		0	INT
+	b		101		1	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	z		102		0	unknown type
+	f		102		0	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	arg1		103		1	INT
+	z		102		0	INT
+	f		102		0	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	arg2		104		1	INT
+	arg1		103		1	INT
+	z		102		0	INT
+	f		102		0	INT
+	y		100		0	INT
+	Z		0		0	INT
+
+	LABEL		Offset 	 LEVEL
+	main		105		0	INT
+	arg2		104		1	INT
+	arg1		103		1	INT
+	z		102		0	INT
+	f		102		0	INT
+	y		100		0	INT
+	Z		0		0	INT
+Block level is 1
+
+	LABEL		Offset 	 LEVEL
+	_T5		1		1	INT
+	_T4		0		1	INT
+	main		105		0	INT
+	arg2		104		1	INT
+	arg1		103		1	INT
+	z		102		0	INT
+	f		102		0	INT
+	y		100		0	INT
+	Z		0		0	INT
+VARIABLE int  y
+VARIABLE int  Z[100]
+FUNCTION int FUNCTION f 
+(
+  PARAMS int b 
+)
+  BLOCK 
+    VARIABLE int  y
+    BLOCK 
+      VARIABLE int  x[10]
+      ASSIGNMENT 
+        ID x 
+        array ref [ 
+          MINUS 
+            PLUS 
+              NUMBER WITH VALUE 2 
+              NUMBER WITH VALUE 3 
+            NUMBER WITH VALUE 5 
+        ] 
+        PLUS 
+          ID b 
+          CALL: f 
+            ARGLIST 
+              PLUS 
+                NUMBER WITH VALUE 5 
+                TIMES 
+                  ID x 
+                  array ref [ 
+                    NUMBER WITH VALUE 2 
+                  ] 
+                  ID b 
+    BLOCK 
+      VARIABLE int  x[10]
+      ASSIGNMENT 
+        ID x 
+        array ref [ 
+          MINUS 
+            PLUS 
+              NUMBER WITH VALUE 2 
+              NUMBER WITH VALUE 3 
+            NUMBER WITH VALUE 5 
+        ] 
+        PLUS 
+          ID b 
+          CALL: f 
+            ARGLIST 
+              PLUS 
+                NUMBER WITH VALUE 5 
+                TIMES 
+                  ID x 
+                  array ref [ 
+                    NUMBER WITH VALUE 2 
+                  ] 
+                  ID b 
+VARIABLE int  z
+FUNCTION int FUNCTION main 
+(
+  PARAMS int arg1 
+  PARAMS int arg2 
+)
+  BLOCK 
+    WRITE 
+      CALL: f 
+        ARGLIST 
+          PLUS 
+            MINUS 
+              PLUS 
+                ID arg1 
+                ID arg2 
+                array ref [ 
+                  PLUS 
+                    NUMBER WITH VALUE 3 
+                    NUMBER WITH VALUE 5 
+                ] 
+              ID z 
+            ID y 
+    WRITE 
+      CALL: f 
+        ARGLIST 
+          PLUS 
+            MINUS 
+              PLUS 
+                ID arg1 
+                ID arg2 
+                array ref [ 
+                  PLUS 
+                    NUMBER WITH VALUE 3 
+                    NUMBER WITH VALUE 5 
+                ] 
+              ID z 
+            ID y 
