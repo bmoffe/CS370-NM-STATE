@@ -3,6 +3,7 @@ int main(void)
 begin
 	int x;
 	int y;
+	boolean a;
 	x = 5;
 	write x;
 	write ",";
@@ -12,4 +13,8 @@ begin
 	else write "false";
 	while (x > 1) do x = x - 1;
 	write x;
+	a = true;
+	write a;
+	a = not a;
+	write a;
 end

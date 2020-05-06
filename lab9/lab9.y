@@ -321,6 +321,7 @@ expression     : simpleexpression {$$= $1;} /*expression*/
                
 variable       : ID {struct SymbTab * p; /*if we try to do math on a void variable or undeclared variable, err*/
 	       	     p = Search($1, level, 1);
+		     Display();
 	       	     if (p == NULL || p ->mysize > 1 || p -> Type == VOIDTYPE){
 			yyerror($1);
 			yyerror("variable undeclared or variable cannot be used this way");

@@ -11,16 +11,16 @@ z:	 .space	4
 
 .text
 main:				#start of function
-		subu $a0, $sp, 40		#adjust stack for function setup
+		subu $a0, $sp, 52		#adjust stack for function setup
 		sw $sp, ($a0)		
 		sw $ra, 4($a0)		
 		move $sp, $a0		
 		li $a0, 5		#expression is a number
 
-		sw $a0, 16($sp)		#move RHS into temp reg
+		sw $a0, 20($sp)		#move RHS into temp reg
 		add $a0, $sp, 8		#ID is scaler
 				
-		lw $t0, 16($sp)		#do some fancy shit
+		lw $t0, 20($sp)		#do some fancy shit
 		sw $t0, ($a0)		#more fancy
 		add $a0, $sp, 8		#ID is scaler
 				
@@ -32,11 +32,11 @@ main:				#start of function
 		syscall		
 		li $a0, 6		#expression is a number
 
-		sw $a0, 20($sp)		#store LHS in temp
+		sw $a0, 24($sp)		#store LHS in temp
 		li $a0, 2		#expression is a number
 
 		move $t0, $a0		#move RHS to temp reg
-		lw $a0, 20($sp)		#load LHS for relop
+		lw $a0, 24($sp)		#load LHS for relop
 		div $a0, $t0		#div
 		mflo $a0		#grab result
 		li $v0 1		
@@ -47,11 +47,11 @@ main:				#start of function
 		add $a0, $sp, 8		#ID is scaler
 				
 		lw $a0, ($a0)		#fetch val for ID
-		sw $a0, 24($sp)		#store LHS in temp
+		sw $a0, 28($sp)		#store LHS in temp
 		li $a0, 5		#expression is a number
 
 		move $t0, $a0		#move RHS to temp reg
-		lw $a0, 24($sp)		#load LHS for relop
+		lw $a0, 28($sp)		#load LHS for relop
 		seq $a0, $a0, $t0		#!=
 		sltiu $a0, $a0, 1		#inverse
 		li $t0, 0		#sets $t0 to 0
@@ -70,30 +70,58 @@ L5:				#loop
 		add $a0, $sp, 8		#ID is scaler
 				
 		lw $a0, ($a0)		#fetch val for ID
-		sw $a0, 28($sp)		#store LHS in temp
-		li $a0, 1		#expression is a number
-
-		move $t0, $a0		#move RHS to temp reg
-		lw $a0, 28($sp)		#load LHS for relop
-		sgt $a0, $a0, $t0		#>
-		beq $a0, $0, L6		#positive condition
-		add $a0, $sp, 8		#ID is scaler
-				
-		lw $a0, ($a0)		#fetch val for ID
 		sw $a0, 32($sp)		#store LHS in temp
 		li $a0, 1		#expression is a number
 
 		move $t0, $a0		#move RHS to temp reg
 		lw $a0, 32($sp)		#load LHS for relop
-		sub $a0, $a0, $t0		#subtraction
-		sw $a0, 36($sp)		#move RHS into temp reg
+		sgt $a0, $a0, $t0		#>
+		beq $a0, $0, L6		#positive condition
 		add $a0, $sp, 8		#ID is scaler
 				
-		lw $t0, 36($sp)		#do some fancy shit
+		lw $a0, ($a0)		#fetch val for ID
+		sw $a0, 36($sp)		#store LHS in temp
+		li $a0, 1		#expression is a number
+
+		move $t0, $a0		#move RHS to temp reg
+		lw $a0, 36($sp)		#load LHS for relop
+		sub $a0, $a0, $t0		#subtraction
+		sw $a0, 40($sp)		#move RHS into temp reg
+		add $a0, $sp, 8		#ID is scaler
+				
+		lw $t0, 40($sp)		#do some fancy shit
 		sw $t0, ($a0)		#more fancy
 		j L5		#check if condition is still true, if yes, loop again
 L6:				#another DO
 		add $a0, $sp, 8		#ID is scaler
+				
+		lw $a0, ($a0)		#fetch val for ID
+		li $v0 1		
+		syscall		
+		li $a0, 1		#expression is a number
+
+		sw $a0, 44($sp)		#move RHS into temp reg
+		add $a0, $sp, 16		#ID is scaler
+				
+		lw $t0, 44($sp)		#do some fancy shit
+		sw $t0, ($a0)		#more fancy
+		add $a0, $sp, 16		#ID is scaler
+				
+		lw $a0, ($a0)		#fetch val for ID
+		li $v0 1		
+		syscall		
+		add $a0, $sp, 16		#ID is scaler
+				
+		lw $a0, ($a0)		#fetch val for ID
+		sw $a0, 48($sp)		#store LHS in temp
+		lw $a0, 48($sp)		#load LHS for relop
+		sltiu $a0, $a0, 1		#not
+		sw $a0, 48($sp)		#move RHS into temp reg
+		add $a0, $sp, 16		#ID is scaler
+				
+		lw $t0, 48($sp)		#do some fancy shit
+		sw $t0, ($a0)		#more fancy
+		add $a0, $sp, 16		#ID is scaler
 				
 		lw $a0, ($a0)		#fetch val for ID
 		li $v0 1		

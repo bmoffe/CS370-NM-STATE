@@ -564,10 +564,10 @@ static const yytype_uint16 yyrline[] =
      205,   208,   222,   236,   236,   247,   248,   251,   252,   258,
      259,   260,   261,   262,   263,   264,   265,   268,   270,   274,
      278,   285,   290,   292,   296,   300,   302,   307,   319,   322,
-     339,   357,   358,   372,   373,   374,   375,   376,   377,   380,
-     381,   396,   397,   400,   401,   416,   417,   418,   419,   422,
-     423,   426,   427,   428,   431,   434,   447,   466,   467,   470,
-     477
+     340,   358,   359,   373,   374,   375,   376,   377,   378,   381,
+     382,   397,   398,   401,   402,   417,   418,   419,   420,   423,
+     424,   427,   428,   429,   432,   435,   448,   467,   468,   471,
+     478
 };
 #endif
 
@@ -1862,6 +1862,7 @@ symbol is not in the table*/
 #line 322 "lab9.y"
     {struct SymbTab * p; /*if we try to do math on a void variable or undeclared variable, err*/
 	       	     p = Search((yyvsp[0].str), level, 1);
+		     Display();
 	       	     if (p == NULL || p ->mysize > 1 || p -> Type == VOIDTYPE){
 			yyerror((yyvsp[0].str));
 			yyerror("variable undeclared or variable cannot be used this way");
@@ -1877,11 +1878,11 @@ symbol is not in the table*/
 			(yyval.node) -> semtype = p -> Type;
 	       	     	(yyval.node) -> name = (yyvsp[0].str);
 		     	(yyval.node) -> s1 = NULL;}
-#line 1881 "y.tab.c"
+#line 1882 "y.tab.c"
     break;
 
   case 50:
-#line 339 "lab9.y"
+#line 340 "lab9.y"
     {struct SymbTab * p; 
 					p = Search((yyvsp[-3].str), level, 1);
 					if (p == NULL){
@@ -1898,17 +1899,17 @@ symbol is not in the table*/
 					(yyval.node) -> semtype = p -> Type;
 					(yyval.node) -> name = (yyvsp[-3].str);
 					(yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 1902 "y.tab.c"
+#line 1903 "y.tab.c"
     break;
 
   case 51:
-#line 357 "lab9.y"
+#line 358 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1908 "y.tab.c"
+#line 1909 "y.tab.c"
     break;
 
   case 52:
-#line 358 "lab9.y"
+#line 359 "lab9.y"
     {(yyval.node) = ASTcreatenode(EXPR); /*create EXPRnode and point s1 to simpleexpression, operator to relop, and s2 to additiveexpression*/
 					 if ((yyvsp[-2].node) -> semtype != (yyvsp[0].node) -> semtype){/*if types mismatch, err*/
 						yyerror("type mismatch");
@@ -1921,53 +1922,53 @@ symbol is not in the table*/
 					 (yyval.node) -> s1 = (yyvsp[-2].node);
 					 (yyval.node) -> operator = (yyvsp[-1].operator);
 					 (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1925 "y.tab.c"
+#line 1926 "y.tab.c"
     break;
 
   case 53:
-#line 372 "lab9.y"
+#line 373 "lab9.y"
     {(yyval.operator) = LESSTHANEQ;}
-#line 1931 "y.tab.c"
+#line 1932 "y.tab.c"
     break;
 
   case 54:
-#line 373 "lab9.y"
+#line 374 "lab9.y"
     {(yyval.operator) = LESSTHAN;}
-#line 1937 "y.tab.c"
+#line 1938 "y.tab.c"
     break;
 
   case 55:
-#line 374 "lab9.y"
+#line 375 "lab9.y"
     {(yyval.operator) = GREATERTHAN;}
-#line 1943 "y.tab.c"
+#line 1944 "y.tab.c"
     break;
 
   case 56:
-#line 375 "lab9.y"
+#line 376 "lab9.y"
     {(yyval.operator) = GREATERTHANEQ;}
-#line 1949 "y.tab.c"
+#line 1950 "y.tab.c"
     break;
 
   case 57:
-#line 376 "lab9.y"
+#line 377 "lab9.y"
     {(yyval.operator) = EQUAL;}
-#line 1955 "y.tab.c"
+#line 1956 "y.tab.c"
     break;
 
   case 58:
-#line 377 "lab9.y"
+#line 378 "lab9.y"
     {(yyval.operator) = NOTEQUAL;}
-#line 1961 "y.tab.c"
+#line 1962 "y.tab.c"
     break;
 
   case 59:
-#line 380 "lab9.y"
+#line 381 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 1967 "y.tab.c"
+#line 1968 "y.tab.c"
     break;
 
   case 60:
-#line 381 "lab9.y"
+#line 382 "lab9.y"
     {
 					 if ((yyvsp[-2].node) -> semtype != (yyvsp[0].node) -> semtype){/*if types mismatch, err*/
 						yyerror("type mismatch");
@@ -1981,29 +1982,29 @@ symbol is not in the table*/
 		   				    (yyval.node) -> s1 = (yyvsp[-2].node);
 						    (yyval.node) -> operator = (yyvsp[-1].operator);
 						    (yyval.node) -> s2 = (yyvsp[0].node);}
-#line 1985 "y.tab.c"
+#line 1986 "y.tab.c"
     break;
 
   case 61:
-#line 396 "lab9.y"
+#line 397 "lab9.y"
     {(yyval.operator) = PLUS;}
-#line 1991 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 62:
-#line 397 "lab9.y"
+#line 398 "lab9.y"
     {(yyval.operator) = MINUS;}
-#line 1997 "y.tab.c"
+#line 1998 "y.tab.c"
     break;
 
   case 63:
-#line 400 "lab9.y"
+#line 401 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 2003 "y.tab.c"
+#line 2004 "y.tab.c"
     break;
 
   case 64:
-#line 401 "lab9.y"
+#line 402 "lab9.y"
     {
 		     			if ((yyvsp[-2].node) -> semtype != (yyvsp[0].node) -> semtype){/*if types mismatch, err*/
 						yyerror("type mismatch");
@@ -2017,77 +2018,77 @@ symbol is not in the table*/
 					(yyval.node) -> name = createtemp();
 					(yyval.node) -> symbol = Insert((yyval.node) -> name, INTTYPE, 0, level, 1, offset, 0);
 					offset++;}
-#line 2021 "y.tab.c"
+#line 2022 "y.tab.c"
     break;
 
   case 65:
-#line 416 "lab9.y"
+#line 417 "lab9.y"
     {(yyval.operator) = MULTI;}
-#line 2027 "y.tab.c"
+#line 2028 "y.tab.c"
     break;
 
   case 66:
-#line 417 "lab9.y"
+#line 418 "lab9.y"
     {(yyval.operator) = DIV;}
-#line 2033 "y.tab.c"
+#line 2034 "y.tab.c"
     break;
 
   case 67:
-#line 418 "lab9.y"
+#line 419 "lab9.y"
     {(yyval.operator) = MYAND;}
-#line 2039 "y.tab.c"
+#line 2040 "y.tab.c"
     break;
 
   case 68:
-#line 419 "lab9.y"
+#line 420 "lab9.y"
     {(yyval.operator) = MYOR;}
-#line 2045 "y.tab.c"
+#line 2046 "y.tab.c"
     break;
 
   case 69:
-#line 422 "lab9.y"
+#line 423 "lab9.y"
     {(yyval.node) = (yyvsp[-1].node);}
-#line 2051 "y.tab.c"
+#line 2052 "y.tab.c"
     break;
 
   case 70:
-#line 423 "lab9.y"
+#line 424 "lab9.y"
     {(yyval.node) = ASTcreatenode(NUMBER); /*number*/
 			  (yyval.node) -> semtype = INTTYPE;/*set semantic type to int*/
 			  (yyval.node) -> value = (yyvsp[0].val);}
-#line 2059 "y.tab.c"
+#line 2060 "y.tab.c"
     break;
 
   case 71:
-#line 426 "lab9.y"
+#line 427 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 2065 "y.tab.c"
+#line 2066 "y.tab.c"
     break;
 
   case 72:
-#line 427 "lab9.y"
+#line 428 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 2071 "y.tab.c"
+#line 2072 "y.tab.c"
     break;
 
   case 73:
-#line 428 "lab9.y"
+#line 429 "lab9.y"
     {(yyval.node) = ASTcreatenode(NUMBER); /*true result of if-else statement; this is set to one*/
 			  (yyval.node) -> semtype = BOOLTYPE;/*set semantic type to boolean*/
 		           (yyval.node) -> value = 1;}
-#line 2079 "y.tab.c"
+#line 2080 "y.tab.c"
     break;
 
   case 74:
-#line 431 "lab9.y"
+#line 432 "lab9.y"
     {(yyval.node) = ASTcreatenode(NUMBER); /*false result of if-else statement; this is set to zero*/
 			  (yyval.node) -> semtype = BOOLTYPE;/*set semantic type to boolean*/
 		            (yyval.node) -> value = 0;}
-#line 2087 "y.tab.c"
+#line 2088 "y.tab.c"
     break;
 
   case 75:
-#line 434 "lab9.y"
+#line 435 "lab9.y"
     {
 				 if ((yyvsp[0].node) -> semtype != BOOLTYPE){/*if types mismatch, err*/
 					yyerror("type mismatch");
@@ -2099,11 +2100,11 @@ symbol is not in the table*/
 				 (yyval.node) -> operator = MYNOT;
 				 (yyval.node) -> semtype = BOOLTYPE;
 				 (yyval.node) -> s1 = (yyvsp[0].node);}
-#line 2103 "y.tab.c"
+#line 2104 "y.tab.c"
     break;
 
   case 76:
-#line 447 "lab9.y"
+#line 448 "lab9.y"
     {struct SymbTab * p;/*if function is undefined, err*/
 					p = Search((yyvsp[-3].str),0,0);
 		   		      if (p == NULL){
@@ -2121,23 +2122,23 @@ symbol is not in the table*/
 				      (yyval.node) -> semtype = p -> Type;
 				      (yyval.node) -> symbol = p;
 				      (yyval.node) -> s1 = (yyvsp[-1].node);}
-#line 2125 "y.tab.c"
+#line 2126 "y.tab.c"
     break;
 
   case 77:
-#line 466 "lab9.y"
+#line 467 "lab9.y"
     {(yyval.node) = NULL;}
-#line 2131 "y.tab.c"
+#line 2132 "y.tab.c"
     break;
 
   case 78:
-#line 467 "lab9.y"
+#line 468 "lab9.y"
     {(yyval.node) = (yyvsp[0].node);}
-#line 2137 "y.tab.c"
+#line 2138 "y.tab.c"
     break;
 
   case 79:
-#line 470 "lab9.y"
+#line 471 "lab9.y"
     {(yyval.node) = ASTcreatenode(ARGSLIST); /*create ARGSLIST node, point s1 to expression and next of arglist to null*/
 		   		 (yyval.node) -> name = createtemp();
 				 (yyval.node) -> symbol = Insert((yyval.node) -> name, (yyvsp[0].node) -> semtype, 0, level, 1, offset, 0);/*insert args into symbol table*/
@@ -2145,11 +2146,11 @@ symbol is not in the table*/
 		   		 (yyval.node) -> s1 = (yyvsp[0].node);
 				 (yyval.node) -> semtype = (yyvsp[0].node) -> semtype;
 				 (yyval.node) -> next = NULL;}
-#line 2149 "y.tab.c"
+#line 2150 "y.tab.c"
     break;
 
   case 80:
-#line 477 "lab9.y"
+#line 478 "lab9.y"
     {(yyval.node) = ASTcreatenode(ARGSLIST); /*do the same thing here, except now next should point to arglist*/
 					     (yyval.node) -> name = createtemp();
 					     (yyval.node) -> symbol = Insert((yyval.node) -> name, (yyvsp[-2].node) -> semtype, 0, level, 1, offset, 0);
@@ -2157,11 +2158,11 @@ symbol is not in the table*/
 					     offset++;
 					     (yyval.node) -> s1 = (yyvsp[-2].node);
 					     (yyval.node) -> next = (yyvsp[0].node);}
-#line 2161 "y.tab.c"
+#line 2162 "y.tab.c"
     break;
 
 
-#line 2165 "y.tab.c"
+#line 2166 "y.tab.c"
 
       default: break;
     }
@@ -2393,7 +2394,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 485 "lab9.y"
+#line 486 "lab9.y"
 	/* end of rules, start of program */
 /*int max(int x, int y){
 	if (x > y){return(x);}

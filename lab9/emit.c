@@ -216,11 +216,9 @@ void emitselect(FILE * f, ASTnode * p){
 	emitast(f, p->s2->s1);
 	sprintf(s,"j %s", L2);
 	emit(f,"", s, "#positive done, jump out of conditional");
-	sprintf(s, "%s",L1);
-	emit(f,s,"","#negative");
+	emit(f,L1,"","#negative");
 	emitast(f,p->s2->s2);
-	sprintf(s, "%s",L2);
-	emit(f,s,"","#done");
+	emit(f,L2,"","#done");
 }
 void emitwhile (FILE * f, ASTnode * p){
 	char s[100];
@@ -228,16 +226,14 @@ void emitwhile (FILE * f, ASTnode * p){
 	char * L2;
 	L1 = genlabel();
 	L2 = genlabel();
-	sprintf(s,"%s",L1);
-	emit(f,s,"","#loop");
+	emit(f,L1,"","#loop");
 	emitexpr(f,p->s1);
 	sprintf(s, "beq $a0, $0, %s", L2);
 	emit(f,"",s,"#positive condition");
 	emitast(f,p->s2);
 	sprintf(s,"j %s",L1);
 	emit(f,"",s,"#check if condition is still true, if yes, loop again");
-	sprintf(s,"%s",L2);
-	emit(f,s,"","#another DO");
+	emit(f,L2,"","#another DO");
 }
 void emitast(FILE * f, ASTnode * p){
 	if (p ==NULL){return;}
